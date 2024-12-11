@@ -52,11 +52,34 @@ namespace WebRentaCar2.Controllers
             return RedirectToAction("Index", "Coche");
         }
 
-        public IActionResult Perfil(UsuarioViewModel usuario)
+        public IActionResult Perfil()
         {
-                     
+            var usuario = HttpContext.Session.Get<UsuarioViewModel>("usuario");
+            if (usuario == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            SessionInitialize();
+            UsuarioRepository usuRepo = new UsuarioRepository();
+            UsuarioCEN usuCEN = new UsuarioCEN(usuRepo);
+            var usuarioEN = usuCEN.GetByCorreo(usuario.Correo);
+
+            if (usuarioEN != null)
+            {
+                CocheRepository cocheRepo = new CocheRepository();
+                CocheCEN cocheCEN = new CocheCEN(cocheRepo);
+                var cochesUsuario = cocheCEN.ObtenerCoches(0, -1)
+                                            .Where(coche => coche.Propietario.IdUsuario == usuarioEN.IdUsuario)
+                                            .ToList();
+
+                ViewData["CochesUsuario"] = cochesUsuario;
+            }
+
+            SessionClose();
             return View(usuario);
         }
+
 
         [HttpPost]
         public IActionResult AddFavorito([FromBody] FavoritoRequest request)
