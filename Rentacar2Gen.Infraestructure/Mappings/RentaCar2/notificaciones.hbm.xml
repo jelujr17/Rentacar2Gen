@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+		<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+		                   assembly="Rentacar2Gen.Infraestructure"
+		                   namespace="Rentacar2Gen.Infraestructure.EN.RentaCar2">
+		    
+		    
+			
+				<class name="NotificacionesNH" table="Notificaciones"> 
+				  	
+						<id name="IdNotificacion" column="idNotificacionNotificaciones" type="integer"> 
+							<generator class="hilo"/>
+						</id>
+			
+					
+					<property name="Mensaje" type="string"> 
+						<column name="mensaje"  not-null="true"/>
+					</property>
+					<property name="Fecha" type="date"> 
+						<column name="fecha"  not-null="true"/>
+					</property>
+			
+			
+			
+			
+			
+		  			
+						<bag name="Usuario" table="[usuario_notificaciones]" inverse="true" >
+							<key>
+								
+									<column name="FK_idNotificacionNotificaciones_idNotificaciones"/> 
+							</key>
+      						<many-to-many class="Rentacar2Gen.Infraestructure.EN.RentaCar2.UsuarioNH">
+									<column name="FK_idUsuarioUsuario_idUsuario"/> 
+      						</many-to-many>
+    					</bag>
+					
+					
+					
+					
+		
+		 </class>	
+		  
+		  <query name="NotificacionesNHReadAllHQL">from NotificacionesNH</query>
+		</hibernate-mapping>
+	

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+		<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+		                   assembly="Rentacar2Gen.Infraestructure"
+		                   namespace="Rentacar2Gen.Infraestructure.EN.RentaCar2">
+		    
+		    
+			
+				<class name="CocheNH" table="Coche"> 
+				  	
+						<id name="Id" column="idCoche" type="integer"> 
+							<generator class="hilo"/>
+						</id>
+			
+					
+					<property name="Matricula" type="string"> 
+						<column name="matriculaCoche"  unique="true" not-null="true"/>
+					</property>
+					<property name="Imagenes" type="string"> 
+						<column name="imagenes"  not-null="true"/>
+					</property>
+					<property name="Precio" type="double"> 
+						<column name="precio"  not-null="true"/>
+					</property>
+					<property name="Plazas" type="integer"> 
+						<column name="plazas"  not-null="true"/>
+					</property>
+					<property name="Tipo" > 
+						<column name="tipo"  not-null="true"/>
+					</property>
+					<property name="Descripcion" type="string"> 
+						<column name="descripcion"  not-null="true"/>
+					</property>
+					<property name="Disponible" > 
+						<column name="disponible"  not-null="true"/>
+					</property>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		  			
+						<many-to-one name="Propietario" class="Rentacar2Gen.Infraestructure.EN.RentaCar2.UsuarioNH" >	
+								<column name="FK_idUsuarioUsuario_idPropietario"/> 
+						</many-to-one>
+											 					
+			
+		  			
+						<bag name="UsuarioFavorito" table="[coche_usuario_2]"  >
+							<key>
+								
+									<column name="FK_idCoche_idCochesFavoritos"/> 
+							</key>
+      						<many-to-many class="Rentacar2Gen.Infraestructure.EN.RentaCar2.UsuarioNH">
+									<column name="FK_idUsuarioUsuario_idUsuarioFavorito"/> 
+      						</many-to-many>
+    					</bag>
+			
+		  			
+						<many-to-one name="Marca" class="Rentacar2Gen.Infraestructure.EN.RentaCar2.MarcaNH" >	
+								<column name="FK_idMarcaMarca_idMarca"/> 
+						</many-to-one>
+											 					
+			
+		  			
+					
+							   <one-to-one name="ReservaActiva" class="Rentacar2Gen.Infraestructure.EN.RentaCar2.ReservaNH" property-ref="Coche" />							
+					 
+						
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+		
+		 </class>	
+		  
+		  <query name="CocheNHReadAllHQL">from CocheNH</query>
+		  <query name="CocheNHfiltroXTipoHQL"><![CDATA[FROM CocheNH WHERE tipo = :tipo]]></query>
+		  <query name="CocheNHfiltroXMarcaHQL"><![CDATA[FROM CocheNH c WHERE c.Marca.Nombre = :marca]]></query>
+		  <query name="CocheNHfiltroXPlazasHQL"><![CDATA[FROM CocheNH WHERE plazas = :plazas]]></query>
+		  <query name="CocheNHfiltroXPrecioHQL"><![CDATA[FROM CocheNH WHERE precio <= :precio]]></query>
+		</hibernate-mapping>
+	

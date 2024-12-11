@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Rentacar2Gen.ApplicationCore.EN.RentaCar2.CocheEN>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <table class="table">
+        <thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Tipo)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Precio)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Matricula)
+				</th>
+				<th></th>
+			</tr>
+        </thead>
+		<tbody>
+			@foreach (var item in Model) {
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Tipo)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Precio)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Matricula)
+					</td>
+
+				</tr>
+			}
+    </table>
+</div>

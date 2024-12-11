@@ -1,0 +1,240 @@
+﻿@model WebRentaCar2.Models.CocheViewModel
+@using WebRentaCar2.Controllers
+@using Rentacar2Gen.ApplicationCore.CEN.RentaCar2;
+@using Rentacar2Gen.ApplicationCore.EN.RentaCar2;
+@using Rentacar2Gen.Infraestructure.Repository.RentaCar2;
+
+@{
+    ViewData["Title"] = "Detalles del Coche";
+    var usuario = Context.Session.Get<UsuarioViewModel>("usuario");
+    string layout = usuario != null ? "_LayoutLogin" : "_Layout";
+    Layout = layout;
+    string nombre = usuario?.Correo ?? "Invitado";
+
+    UsuarioEN usuarioEN = null;
+    if (usuario != null)
+    {
+        UsuarioRepository usuRepo = new UsuarioRepository();
+        UsuarioCEN usuCEN = new UsuarioCEN(usuRepo);
+        usuarioEN = usuCEN.GetByCorreo(nombre);
+    }
+}
+
+<div class="container mt-4">
+    <!-- Navegación breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Coche")">Coches</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Matricula</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Columna de la imagen principal y miniaturas -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                @if (Model != null && !string.IsNullOrEmpty(Model.ImagenUrl))
+                {
+                    <img src="@Model.ImagenUrl" class="img-fluid rounded" alt="Imagen del coche" />
+                }
+                else
+                {
+                    <div class="placeholder bg-secondary text-white text-center rounded" style="height: 300px;">
+                        <p class="pt-5">Imagen no disponible</p>
+                    </div>
+                }
+            </div>
+            <div class="d-flex justify-content-start">
+                <!-- Miniaturas -->
+                <img src="@Model.ImagenUrl" class="img-thumbnail mx-1" style="width: 80px; height: 80px;" alt="Imagen miniatura 1" />
+                <img src="@Model.ImagenUrl" class="img-thumbnail mx-1" style="width: 80px; height: 80px;" alt="Imagen miniatura 2" />
+                <img src="@Model.ImagenUrl" class="img-thumbnail mx-1" style="width: 80px; height: 80px;" alt="Imagen miniatura 3" />
+                <!-- Más miniaturas pueden añadirse -->
+            </div>
+        </div>
+
+        <!-- Columna de los detalles del coche -->
+        <div class="col-md-6">
+            <h2 class="mb-3">@Model.Matricula</h2>
+            <h3 class="text-danger mb-3">€@Html.DisplayFor(model => model.Precio)</h3>
+
+            <div class="mb-3">
+                <p><strong>Plazas:</strong> @Model.Plazas</p>
+                <p><strong>Tipo:</strong> @Model.Tipo</p>
+                <p><strong>Estado:</strong> @Model.Disponible</p>
+                <p><strong>Propietario:</strong> @Model.Propietario</p>
+                <p><strong>Marca:</strong> @Model.Marca</p>
+            </div>
+
+            <div class="mb-3">
+                <label for="startDate" class="form-label"><strong>Inicio:</strong></label>
+                <input type="date" id="startDate" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="endDate" class="form-label"><strong>Fin:</strong></label>
+                <input type="date" id="endDate" class="form-control" />
+            </div>
+
+            <div class="d-flex align-items-center mb-3">
+                @if (usuario != null)
+                {
+                    string favoritos = usuario.Favoritos;
+                    var matriculasFavoritas = usuario.Favoritos.Split(',').Select(m => m.Trim()).ToList();
+                    int aux = Model.Id;
+
+                    <button type="button" id="favorito-btn-@Model.Id"
+                            class="btn @(matriculasFavoritas.Contains(Model.Id.ToString()) ? "btn-danger" : "btn-outline-danger") me-2"
+                            onclick="showConfirmModal(@Model.Id, '@(matriculasFavoritas.Contains(Model.Id.ToString()) ? "remove" : "add")')">
+                        <i class="@(matriculasFavoritas.Contains(Model.Id.ToString()) ? "bi-heart-fill" : "bi-heart")"></i>
+                    </button>
+
+                }
+                <button class="btn btn-primary btn-lg w-100">Añadir al carrito</button>
+            </div>
+            <small class="text-muted d-block">
+                Al realizar una transacción se compromete a cumplir los Términos y Condiciones de Auto Rent.
+            </small>
+        </div>
+    </div>
+
+    <!-- Sección de vehículos relacionados -->
+    <div class="mt-5">
+        <h4>Vehículos relacionados</h4>
+        <div class="d-flex justify-content-start">
+            <div class="card mx-2" style="width: 150px;">
+                <img src="@Model.ImagenUrl" class="card-img-top" alt="Coche relacionado 1" />
+                <div class="card-body text-center">
+                    <p class="card-text">Coche relacionado 1</p>
+                </div>
+            </div>
+            <div class="card mx-2" style="width: 150px;">
+                <img src="@Model.ImagenUrl" class="card-img-top" alt="Coche relacionado 2" />
+                <div class="card-body text-center">
+                    <p class="card-text">Coche relacionado 2</p>
+                </div>
+            </div>
+            <div class="card mx-2" style="width: 150px;">
+                <img src="@Model.ImagenUrl" class="card-img-top" alt="Coche relacionado 3" />
+                <div class="card-body text-center">
+                    <p class="card-text">Coche relacionado 3</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de confirmación -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirmar acción</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas @Html.Raw("<span id='modalAction'></span>") este coche a tus favoritos?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmButton">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function toggleFavorito(cocheId, action) {
+        const url = action === "add" ? "/Usuario/AddFavorito" : "/Usuario/EliminarFavorito";
+        const data = {
+            usuarioId: @usuarioEN?.IdUsuario ?? 0,
+            cocheId: cocheId
+        };
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    // Actualizar el icono del corazón
+                    const button = document.getElementById(`favorito-btn-${cocheId}`);
+                    if (action === "add") {
+                        button.classList.remove("btn-outline-danger");
+                        button.classList.add("btn-danger");
+                        button.innerHTML = '<i class="bi-heart-fill"></i>';
+                        button.setAttribute("onclick", `showConfirmModal(${cocheId}, 'remove')`);
+                    } else {
+                        button.classList.remove("btn-danger");
+                        button.classList.add("btn-outline-danger");
+                        button.innerHTML = '<i class="bi-heart"></i>';
+                        button.setAttribute("onclick", `showConfirmModal(${cocheId}, 'add')`);
+                    }
+                } else {
+                    alert("Error: " + result.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+
+<script>
+    let cocheIdGlobal;
+    let actionGlobal;
+
+    function showConfirmModal(cocheId, action) {
+        cocheIdGlobal = cocheId;
+        actionGlobal = action;
+        document.getElementById('modalAction').innerText = action === "add" ? "agregar" : "eliminar";
+        var confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        confirmModal.show();
+    }
+
+    document.getElementById('confirmButton').addEventListener('click', function () {
+        toggleFavorito(cocheIdGlobal, actionGlobal);
+        var confirmModal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
+        confirmModal.hide();
+    });
+</script>
+
+<style>
+    .container {
+        margin-top: 20px;
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .text-danger {
+        color: #b12704;
+    }
+
+    .btn-primary {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+        .btn-primary:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+    .breadcrumb {
+        background-color: #f8f9fa;
+    }
+
+    .card {
+        border: none;
+    }
+
+    .card-img-top {
+        height: 100px;
+        object-fit: cover;
+    }
+</style>

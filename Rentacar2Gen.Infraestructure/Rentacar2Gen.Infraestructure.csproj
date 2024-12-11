@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+		  <ItemGroup>
+		  
+	<EmbeddedResource Include="Mappings\RentaCar2\coche.hbm.xml" />
+	<EmbeddedResource Include="Mappings\RentaCar2\usuario.hbm.xml" />
+	<EmbeddedResource Include="Mappings\RentaCar2\marca.hbm.xml" />
+	<EmbeddedResource Include="Mappings\RentaCar2\reserva.hbm.xml" />
+	<EmbeddedResource Include="Mappings\RentaCar2\notificaciones.hbm.xml" />
+	<EmbeddedResource Include="Mappings\RentaCar2\mensajes.hbm.xml" />
+	<EmbeddedResource Include="Mappings\RentaCar2\valoracion.hbm.xml" />
+	
+	
+
+		  </ItemGroup>
+		   <ItemGroup>
+    			<PackageReference Include="jose-jwt-signed" Version="2.3.0" />
+   				<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+   				<PackageReference Include="NHibernate" Version="5.5.2" />
+   				<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+   				
+   				<!--  /*PROTECTED REGION ID(externalLibraries) ENABLED START*/ -->
+   				<!--  /*PROTECTED REGION END*/ -->
+  		  </ItemGroup>
+		  <ItemGroup>
+		    <Content Include="hibernate.cfg.xml">
+		      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		    </Content>
+		  </ItemGroup>
+		  <ItemGroup>
+   			 <ProjectReference Include="..\Rentacar2Gen.ApplicationCore\Rentacar2Gen.ApplicationCore.csproj"/>
+   		  </ItemGroup>
+		</Project>
