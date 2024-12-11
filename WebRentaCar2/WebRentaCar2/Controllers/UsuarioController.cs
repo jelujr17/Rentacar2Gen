@@ -52,6 +52,12 @@ namespace WebRentaCar2.Controllers
             return RedirectToAction("Index", "Coche");
         }
 
+        public IActionResult Perfil(UsuarioViewModel usuario)
+        {
+                     
+            return View(usuario);
+        }
+
         [HttpPost]
         public IActionResult AddFavorito([FromBody] FavoritoRequest request)
         {

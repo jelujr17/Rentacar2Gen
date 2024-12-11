@@ -1,0 +1,55 @@
+﻿@model WebRentaCar2.Models.UsuarioViewModel
+@using WebRentaCar2.Controllers
+@using Rentacar2Gen.ApplicationCore.CEN.RentaCar2;
+@using Rentacar2Gen.ApplicationCore.EN.RentaCar2;
+@using Rentacar2Gen.Infraestructure.Repository.RentaCar2;
+
+@{
+    ViewData["Title"] = "Perfil";
+    var usuario = Context.Session.Get<UsuarioViewModel>("usuario");
+    string layout = usuario != null ? "_LayoutLogin" : "_Layout";
+    Layout = layout;
+    string nombre = usuario?.Correo ?? "Invitado";
+
+    UsuarioEN usuarioEN = null;
+    if (usuario != null)
+    {
+        UsuarioRepository usuRepo = new UsuarioRepository();
+        UsuarioCEN usuCEN = new UsuarioCEN(usuRepo);
+        usuarioEN = usuCEN.GetByCorreo(nombre);
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perfil del Usuario</title>
+</head>
+<body>
+    <h1>Perfil del Usuario</h1>
+    <div>
+        <img src="@usuario.Foto" alt="Foto del Usuario" />
+    </div>
+    <div>
+        <label>Correo:</label>
+        <span>@usuario.Correo</span>
+    </div>
+    <div>
+        <label>Fecha de Nacimiento:</label>
+        <span>@usuario.FechaNacimiento?.ToString("dd/MM/yyyy")</span>
+    </div>
+    <div>
+        <label>Teléfono:</label>
+        <span>@usuario.Telefono</span>
+    </div>
+    <div>
+        <label>Dirección:</label>
+        <span>@usuario.Direccion</span>
+    </div>
+    <div>
+        <label>Favoritos:</label>
+        <span>@usuario.Favoritos</span>
+    </div>
+    <!-- Aquí puedes agregar más campos según sea necesario -->
+</body>
+</html>

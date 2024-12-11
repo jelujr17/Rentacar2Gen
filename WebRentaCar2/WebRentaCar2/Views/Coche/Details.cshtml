@@ -4,6 +4,7 @@
 @using Rentacar2Gen.ApplicationCore.EN.RentaCar2;
 @using Rentacar2Gen.Infraestructure.Repository.RentaCar2;
 
+
 @{
     ViewData["Title"] = "Detalles del Coche";
     var usuario = Context.Session.Get<UsuarioViewModel>("usuario");
@@ -19,6 +20,7 @@
         usuarioEN = usuCEN.GetByCorreo(nombre);
     }
 }
+
 
 <div class="container mt-4">
     <!-- Navegación breadcrumb -->
