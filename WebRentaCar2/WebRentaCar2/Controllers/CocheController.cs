@@ -62,16 +62,12 @@ namespace WebRentaCar2.Controllers
                 // Obtener las valoraciones del coche por ID
                 IList<ValoracionEN> valoracionEN = valoracionCEN.ValoracionesCocheId(id);
 
-                // Calcular la media de las valoraciones
-                double valoracion = 0;
-                if (valoracionEN != null && valoracionEN.Count > 0)
-                {
-                    valoracion = valoracionEN.Average(v => v.Valoracion);
-                }
+                
 
                 // Convertir el coche a ViewModel
                 CocheViewModel cocheView = new CocheAssembler().ConvertirENToViewModel(cocheEN);
-                cocheView.valoracion = valoracion;
+
+                cocheView.valoracion = valoracionEN;
 
                 SessionClose();
                 return View(cocheView);

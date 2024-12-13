@@ -64,22 +64,34 @@
             <div class="mb-3">
                 <div class="mb-3">
                     <strong>Valoración:</strong>
-                    <div class="rating">
-                        @for (int i = 1; i <= 5; i++)
-                        {
-                            if (i <= Math.Floor(Model.valoracion))
+
+                    @if (Model.valoracion != null && Model.valoracion.Any())
+                    {
+                        var promedioValoracion = Model.valoracion.Average(v => v.Valoracion);
+                        <div class="rating">
+                            @for (int i = 1; i <= 5; i++)
                             {
-                                <i class="bi-star-fill text-warning"></i> <!-- Estrella llena -->
+                                if (i <= Math.Floor(promedioValoracion))
+                                {
+                                    <i class="bi-star-fill text-warning"></i> <!-- Estrella llena -->
+                                }
+                                else if (i - promedioValoracion < 1)
+                                {
+                                    <i class="bi-star-half text-warning"></i> <!-- Estrella media -->
+                                }
+                                else
+                                {
+                                    <i class="bi-star text-warning"></i> <!-- Estrella vacía -->
+                                }
                             }
-                            else if (i - Model.valoracion < 1)
-                            {
-                                <i class="bi-star-half text-warning"></i> <!-- Estrella media -->
-                            }
-                            else
-                            {
-                                <i class="bi-star text-warning"></i> <!-- Estrella vacía -->
-                            }
-                        }
+                            (@Model.valoracion.Count)
+                        </div>
+                        
+                    }
+                    else
+                    {
+                        <p>No hay valoraciones disponibles.</p>
+                    }
                     </div>
                 </div>
                 <p><strong>Plazas:</strong> @Model.Plazas</p>
