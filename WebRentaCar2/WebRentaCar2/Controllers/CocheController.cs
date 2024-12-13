@@ -20,11 +20,13 @@ namespace WebRentaCar2.Controllers
     {
         private readonly IWebHostEnvironment _webHost;
         private readonly ICocheRepository _cocheRepository;
+        private readonly IValoracionRepository _valoracionRepository;
 
-        public CocheController(IWebHostEnvironment webHost, ICocheRepository cocheRepository)
+        public CocheController(IWebHostEnvironment webHost, ICocheRepository cocheRepository, IValoracionRepository valoracionRepository)
         {
             _webHost = webHost;
             _cocheRepository = cocheRepository;
+            _valoracionRepository = valoracionRepository;
         }
 
         // GET: CocheController
@@ -44,16 +46,43 @@ namespace WebRentaCar2.Controllers
         // GET: CocheController/Details/5
         public ActionResult Details(int id)
         {
-            SessionInitialize();
-            CocheCEN cocheCEN = new CocheCEN(_cocheRepository);
+            try
+            {
+                SessionInitialize();
+                CocheCEN cocheCEN = new CocheCEN(_cocheRepository);
+                ValoracionCEN valoracionCEN = new ValoracionCEN(_valoracionRepository);
 
-            CocheEN cocheEN = cocheCEN.ObtenCocheId(id);
-            CocheViewModel? cocheView = null;
-            if (cocheEN != null)
-                cocheView = new CocheAssembler().ConvertirENToViewModel(cocheEN);
+                // Obtener el coche por ID
+                CocheEN cocheEN = cocheCEN.ObtenCocheId(id);
+                if (cocheEN == null)
+                {
+                    return NotFound(); // Manejo de caso donde el coche no se encuentra
+                }
 
-            SessionClose();
-            return View(cocheView);
+                // Obtener las valoraciones del coche por ID
+                IList<ValoracionEN> valoracionEN = valoracionCEN.ValoracionesCocheId(id);
+
+                // Calcular la media de las valoraciones
+                double valoracion = 0;
+                if (valoracionEN != null && valoracionEN.Count > 0)
+                {
+                    valoracion = valoracionEN.Average(v => v.Valoracion);
+                }
+
+                // Convertir el coche a ViewModel
+                CocheViewModel cocheView = new CocheAssembler().ConvertirENToViewModel(cocheEN);
+                cocheView.valoracion = valoracion;
+
+                SessionClose();
+                return View(cocheView);
+            }
+            catch (Exception ex)
+            {
+                // Manejo de excepciones
+                SessionClose();
+                // Podrías registrar el error aquí
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor");
+            }
         }
 
         // GET: ArticuloController/Create
@@ -152,16 +181,5 @@ namespace WebRentaCar2.Controllers
             }
         }
 
-        public void CalcularValoracionMedia(CocheViewModel coche)
-        {
-            if (coche.Valoraciones != null && Valoraciones.Count > 0)
-            {
-                valoracion = (int)Valoraciones.Average();
-            }
-            else
-            {
-                valoracion = 0; // O cualquier valor por defecto que consideres apropiado
-            }
-        }
     }
 }

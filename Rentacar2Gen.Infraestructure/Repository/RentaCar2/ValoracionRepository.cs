@@ -1,4 +1,3 @@
-
 using System;
 using System.Text;
 using Rentacar2Gen.ApplicationCore.CEN.RentaCar2;
@@ -11,6 +10,7 @@ using Rentacar2Gen.ApplicationCore.Exceptions;
 using Rentacar2Gen.ApplicationCore.IRepository.RentaCar2;
 using Rentacar2Gen.ApplicationCore.CP.RentaCar2;
 using Rentacar2Gen.Infraestructure.EN.RentaCar2;
+using NHibernate.Loader.Custom;
 
 
 /*
@@ -279,5 +279,34 @@ public System.Collections.Generic.IList<ValoracionEN> ObtenerValoraciones (int f
 
         return result;
 }
-}
+        public System.Collections.Generic.IList<ValoracionEN> ObtenerValoracionesCoche(int id)
+        {
+            System.Collections.Generic.IList<ValoracionEN> result = null;
+            try
+            {
+                SessionInitializeTransaction();
+
+                result = session.CreateCriteria(typeof(ValoracionNH))
+                                .Add(Restrictions.Eq("IdDestinatario", id))
+                                .Add(Restrictions.Eq("TipoValoracion", Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.TipoValoracionEnum.coche))
+                                .List<ValoracionEN>();
+
+                SessionCommit();
+            }
+            catch (Exception ex)
+            {
+                SessionRollBack();
+                if (ex is Rentacar2Gen.ApplicationCore.Exceptions.ModelException)
+                    throw;
+                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException("Error in ValoracionRepository.", ex);
+            }
+            finally
+            {
+                SessionClose();
+            }
+
+            return result;
+        }
+        }
+   
 }

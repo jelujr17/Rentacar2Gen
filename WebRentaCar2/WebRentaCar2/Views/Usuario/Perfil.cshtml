@@ -7,8 +7,8 @@
 @{
     ViewData["Title"] = "Perfil";
     var usuario = Context.Session.Get<UsuarioViewModel>("usuario");
-    string layout = usuario != null ? "_LayoutLogin" : "_Layout";
-    Layout = layout;
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+
     string nombre = usuario?.Correo ?? "Invitado";
 
     UsuarioEN usuarioEN = null;

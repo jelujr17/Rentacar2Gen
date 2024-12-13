@@ -76,48 +76,8 @@ namespace WebRentaCar2.Models
         [ScaffoldColumn(false)]
         public List<string> UsuariosFavoritos { get; set; } = new List<string>();
 
-        public int valoracion { get; set; }
+        public double valoracion { get; set; }
 
-        public bool EsUsuarioFavorito(string correoUsuario)
-        {
-            
-            // Verificar si la lista de usuarios favoritos no es nula
-            if (UsuariosFavoritos == null)
-            {
-                return false;
-            }
-
-            // Verificar si el coche con el ID especificado está en la lista de coches favoritos
-            for (int i = 0; i < UsuariosFavoritos.Count; i++)
-            {
-                if (UsuariosFavoritos[i] == correoUsuario)
-                {
-                    return true;
-
-                }
-            }
-            return false;
-        }
-
-        public bool ToggleFavorito(string correoUsuario)
-        {
-            // Verificar si la lista de usuarios favoritos no es nula
-            if (UsuariosFavoritos == null)
-            {
-                return false;
-            }
-
-            bool aux = EsUsuarioFavorito(correoUsuario);
-
-            if (aux)
-            {
-                UsuariosFavoritos.Add(correoUsuario);
-            }
-            else
-            {
-                UsuariosFavoritos.Remove(correoUsuario);
-            }
-            return false;
-        }
+        
     }
 }

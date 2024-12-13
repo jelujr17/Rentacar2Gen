@@ -97,5 +97,14 @@ public System.Collections.Generic.IList<ValoracionEN> ObtenerValoraciones (int f
         list = _IValoracionRepository.ObtenerValoraciones (first, size);
         return list;
 }
-}
+
+        public System.Collections.Generic.IList<ValoracionEN> ObtenerValoracionesCoche(int id)
+        {
+            System.Collections.Generic.IList<ValoracionEN> list = null;
+
+            list = _IValoracionRepository.ObtenerValoracionesCoche(id);
+            return list;
+        }
+        
+    }
 }

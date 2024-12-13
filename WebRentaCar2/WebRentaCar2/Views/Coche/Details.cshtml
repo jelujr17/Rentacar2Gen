@@ -62,6 +62,26 @@
             <h3 class="text-danger mb-3">€@Html.DisplayFor(model => model.Precio)</h3>
 
             <div class="mb-3">
+                <div class="mb-3">
+                    <strong>Valoración:</strong>
+                    <div class="rating">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= Math.Floor(Model.valoracion))
+                            {
+                                <i class="bi-star-fill text-warning"></i> <!-- Estrella llena -->
+                            }
+                            else if (i - Model.valoracion < 1)
+                            {
+                                <i class="bi-star-half text-warning"></i> <!-- Estrella media -->
+                            }
+                            else
+                            {
+                                <i class="bi-star text-warning"></i> <!-- Estrella vacía -->
+                            }
+                        }
+                    </div>
+                </div>
                 <p><strong>Plazas:</strong> @Model.Plazas</p>
                 <p><strong>Tipo:</strong> @Model.Tipo</p>
                 <p><strong>Estado:</strong> @Model.Disponible</p>

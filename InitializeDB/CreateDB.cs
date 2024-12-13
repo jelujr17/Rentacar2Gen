@@ -136,8 +136,8 @@ public static void InitializeData ()
                 Console.WriteLine ("Mensajes creados");
 
                 int valoracion1 = valoracioncen.NuevaValoracion ("valoracion1", 5, TipoValoracionEnum.coche, usuario1, coche1);
-                int valoracion2 = valoracioncen.NuevaValoracion ("valoracion2", 5, TipoValoracionEnum.usuario, usuario2, usuario1);
-                int valoracion3 = valoracioncen.NuevaValoracion ("valoracion3", 5, TipoValoracionEnum.usuario, usuario2, usuario1);
+                int valoracion2 = valoracioncen.NuevaValoracion ("valoracion2", 3, TipoValoracionEnum.coche, usuario2, coche1);
+                int valoracion3 = valoracioncen.NuevaValoracion ("valoracion3", 3, TipoValoracionEnum.coche, usuario2, coche1);
                 int valoracion4 = valoracioncen.NuevaValoracion ("valoracion4", 5, TipoValoracionEnum.coche, usuario2, coche1);
                 Console.WriteLine ("Valoraciones creadas");
 
@@ -205,7 +205,7 @@ public static void InitializeData ()
                 //valoracionesCocheId
                 IList<ValoracionEN> valoracionesCochesId = valoracioncen.ValoracionesCocheId (coche1);
                 foreach (ValoracionEN valoracion in valoracionesCochesId) {
-                    Console.WriteLine ("Las valoraciones del coche con ID: " + coche1 + " son: " + valoracion.Comentario);
+                    Console.WriteLine ("Las valoraciones del coche con ID: " + coche1 + " son: " + valoracion.Valoracion);
                 }
                  
                 //valoracionesUsuariosId
