@@ -21,12 +21,14 @@ namespace WebRentaCar2.Controllers
         private readonly IWebHostEnvironment _webHost;
         private readonly ICocheRepository _cocheRepository;
         private readonly IValoracionRepository _valoracionRepository;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public CocheController(IWebHostEnvironment webHost, ICocheRepository cocheRepository, IValoracionRepository valoracionRepository)
+        public CocheController(IWebHostEnvironment webHost, ICocheRepository cocheRepository, IValoracionRepository valoracionRepository, IUsuarioRepository usuarioRepository)
         {
             _webHost = webHost;
             _cocheRepository = cocheRepository;
             _valoracionRepository = valoracionRepository;
+            _usuarioRepository = usuarioRepository;
         }
 
         // GET: CocheController
@@ -46,40 +48,56 @@ namespace WebRentaCar2.Controllers
         // GET: CocheController/Details/5
         public ActionResult Details(int id)
         {
+            if (id <= 0)
+            {
+                return BadRequest("El ID debe ser un número positivo.");
+            }
+
             try
             {
                 SessionInitialize();
                 CocheCEN cocheCEN = new CocheCEN(_cocheRepository);
                 ValoracionCEN valoracionCEN = new ValoracionCEN(_valoracionRepository);
+                UsuarioCEN usuarioCEN = new UsuarioCEN(_usuarioRepository);
 
                 // Obtener el coche por ID
                 CocheEN cocheEN = cocheCEN.ObtenCocheId(id);
                 if (cocheEN == null)
                 {
-                    return NotFound(); // Manejo de caso donde el coche no se encuentra
+                    return StatusCode(StatusCodes.Status404NotFound, "Coche no encontrado.");
                 }
 
                 // Obtener las valoraciones del coche por ID
-                IList<ValoracionEN> valoracionEN = valoracionCEN.ValoracionesCocheId(id);
+                IList<ValoracionEN> valoracionEN = valoracionCEN.ValoracionesCocheId(id) ?? new List<ValoracionEN>();
 
-                
+                // Cargar los usuarios asociados a las valoraciones
+                foreach (var valoracion in valoracionEN)
+                {
+                    valoracion.Usuario = usuarioCEN.ObtenUsuarioId(valoracion.Usuario.IdUsuario);
+                }
 
                 // Convertir el coche a ViewModel
                 CocheViewModel cocheView = new CocheAssembler().ConvertirENToViewModel(cocheEN);
-
                 cocheView.valoracion = valoracionEN;
 
-                SessionClose();
                 return View(cocheView);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest("El ID proporcionado no es válido.");
             }
             catch (Exception ex)
             {
-                // Manejo de excepciones
-                SessionClose();
                 // Podrías registrar el error aquí
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor");
             }
+            finally
+            {
+                SessionClose();
+            }
         }
+
+
 
         // GET: ArticuloController/Create
         public ActionResult CreateConTipo()

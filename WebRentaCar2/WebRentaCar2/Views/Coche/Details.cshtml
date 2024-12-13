@@ -86,96 +86,167 @@
                             }
                             (@Model.valoracion.Count)
                         </div>
-                        
+
                     }
                     else
                     {
                         <p>No hay valoraciones disponibles.</p>
                     }
-                    </div>
                 </div>
-                <p><strong>Plazas:</strong> @Model.Plazas</p>
-                <p><strong>Tipo:</strong> @Model.Tipo</p>
-                <p><strong>Estado:</strong> @Model.Disponible</p>
-                <p><strong>Propietario:</strong> @Model.Propietario</p>
-                <p><strong>Marca:</strong> @Model.Marca</p>
             </div>
-
-            <div class="mb-3">
-                <label for="startDate" class="form-label"><strong>Inicio:</strong></label>
-                <input type="date" id="startDate" class="form-control" />
-            </div>
-            <div class="mb-3">
-                <label for="endDate" class="form-label"><strong>Fin:</strong></label>
-                <input type="date" id="endDate" class="form-control" />
-            </div>
-
-            <div class="d-flex align-items-center mb-3">
-                @if (usuario != null)
-                {
-                    string favoritos = usuario.Favoritos;
-                    var matriculasFavoritas = usuario.Favoritos.Split(',').Select(m => m.Trim()).ToList();
-                    int aux = Model.Id;
-
-                    <button type="button" id="favorito-btn-@Model.Id"
-                            class="btn @(matriculasFavoritas.Contains(Model.Id.ToString()) ? "btn-danger" : "btn-outline-danger") me-2"
-                            onclick="showConfirmModal(@Model.Id, '@(matriculasFavoritas.Contains(Model.Id.ToString()) ? "remove" : "add")')">
-                        <i class="@(matriculasFavoritas.Contains(Model.Id.ToString()) ? "bi-heart-fill" : "bi-heart")"></i>
-                    </button>
-
-                }
-                <button class="btn btn-primary btn-lg w-100">Añadir al carrito</button>
-            </div>
-            <small class="text-muted d-block">
-                Al realizar una transacción se compromete a cumplir los Términos y Condiciones de Auto Rent.
-            </small>
+            <p><strong>Plazas:</strong> @Model.Plazas</p>
+            <p><strong>Tipo:</strong> @Model.Tipo</p>
+            <p><strong>Estado:</strong> @Model.Disponible</p>
+            <p><strong>Propietario:</strong> @Model.Propietario</p>
+            <p><strong>Marca:</strong> @Model.Marca</p>
         </div>
-    </div>
 
-    <!-- Sección de vehículos relacionados -->
-    <div class="mt-5">
-        <h4>Vehículos relacionados</h4>
-        <div class="d-flex justify-content-start">
-            <div class="card mx-2" style="width: 150px;">
-                <img src="@Model.ImagenUrl" class="card-img-top" alt="Coche relacionado 1" />
-                <div class="card-body text-center">
-                    <p class="card-text">Coche relacionado 1</p>
-                </div>
-            </div>
-            <div class="card mx-2" style="width: 150px;">
-                <img src="@Model.ImagenUrl" class="card-img-top" alt="Coche relacionado 2" />
-                <div class="card-body text-center">
-                    <p class="card-text">Coche relacionado 2</p>
-                </div>
-            </div>
-            <div class="card mx-2" style="width: 150px;">
-                <img src="@Model.ImagenUrl" class="card-img-top" alt="Coche relacionado 3" />
-                <div class="card-body text-center">
-                    <p class="card-text">Coche relacionado 3</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal de confirmación -->
-    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalLabel">Confirmar acción</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ¿Estás seguro de que deseas @Html.Raw("<span id='modalAction'></span>") este coche a tus favoritos?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="confirmButton">Confirmar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+        <div class="d-flex align-items-center mb-3">
+            @if (usuario != null)
+            {
+                string favoritos = usuario.Favoritos;
+                var matriculasFavoritas = usuario.Favoritos.Split(',').Select(m => m.Trim()).ToList();
+                int aux = Model.Id;
 
+                <button type="button" id="favorito-btn-@Model.Id"
+                        class="btn @(matriculasFavoritas.Contains(Model.Id.ToString()) ? "btn-danger" : "btn-outline-danger") me-2"
+                        onclick="showConfirmModal(@Model.Id, '@(matriculasFavoritas.Contains(Model.Id.ToString()) ? "remove" : "add")')">
+                    <i class="@(matriculasFavoritas.Contains(Model.Id.ToString()) ? "bi-heart-fill" : "bi-heart")"></i>
+                </button>
+
+            }
+            <button class="btn btn-primary btn-lg w-100">Añadir al carrito</button>
+        </div>
+        <small class="text-muted d-block">
+            Al realizar una transacción se compromete a cumplir los Términos y Condiciones de Auto Rent.
+        </small>
+    </div>
 </div>
+
+<!-- Sección de vehículos relacionados -->
+<div class="mt-5">
+    <h4>Vehículos relacionados</h4>
+    <div class="d-flex justify-content-start">
+        <div class="card mx-2" style="width: 150px;">
+            <img src="@Model.ImagenUrl" class="card-img-top" alt="Coche relacionado 1" />
+            <div class="card-body text-center">
+                <p class="card-text">Coche relacionado 1</p>
+            </div>
+        </div>
+        <div class="card mx-2" style="width: 150px;">
+            <img src="@Model.ImagenUrl" class="card-img-top" alt="Coche relacionado 2" />
+            <div class="card-body text-center">
+                <p class="card-text">Coche relacionado 2</p>
+            </div>
+        </div>
+        <div class="card mx-2" style="width: 150px;">
+            <img src="@Model.ImagenUrl" class="card-img-top" alt="Coche relacionado 3" />
+            <div class="card-body text-center">
+                <p class="card-text">Coche relacionado 3</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Sección de valoraciones -->
+<div class="mt-5">
+    <h4>Valoraciones del coche</h4>
+    @if (Model.valoracion != null && Model.valoracion.Any())
+    {
+        foreach (var valoracion in Model.valoracion)
+        {
+            <div class="mb-3">
+                <div class="rating">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= valoracion.Valoracion)
+                        {
+                            <i class="bi-star-fill text-warning"></i> <!-- Estrella llena -->
+                        }
+                        else if (i - valoracion.Valoracion < 1)
+                        {
+                            <i class="bi-star-half text-warning"></i> <!-- Estrella media -->
+                        }
+                        else
+                        {
+                            <i class="bi-star text-warning"></i> <!-- Estrella vacía -->
+                        }
+                    }
+                </div>
+                <p class="mb-1"><strong>Comentario:</strong> @valoracion.Comentario</p>
+                <p class="mb-1"><strong>Usuario:</strong> @valoracion.Usuario?.Correo ?? "Anónimo"</p>
+                <hr />
+            </div>
+        }
+    }
+    else
+    {
+        <p>No hay valoraciones disponibles para este coche.</p>
+    }
+
+    <!-- Botón para añadir una valoración -->
+    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addRatingModal">
+        Añadir valoración
+    </button>
+</div>
+
+<!-- Modal para añadir valoración -->
+<div class="modal fade" id="addRatingModal" tabindex="-1" aria-labelledby="addRatingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addRatingModalLabel">Añadir valoración</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="ratingForm">
+                    <div class="mb-3">
+                        <label for="ratingValue" class="form-label">Puntuación:</label>
+                        <select id="ratingValue" class="form-select">
+                            <option value="1">1 estrella</option>
+                            <option value="2">2 estrellas</option>
+                            <option value="3">3 estrellas</option>
+                            <option value="4">4 estrellas</option>
+                            <option value="5">5 estrellas</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ratingComment" class="form-label">Comentario:</label>
+                        <textarea id="ratingComment" class="form-control" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="submitRating()">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirmar acción</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas @Html.Raw("<span id='modalAction'></span>") este coche a tus favoritos?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmButton">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+
+
 
 <script>
     function toggleFavorito(cocheId, action) {
@@ -196,17 +267,17 @@
             .then(result => {
                 if (result.success) {
                     // Actualizar el icono del corazón
-                    const button = document.getElementById(`favorito-btn-${cocheId}`);
+                    const button = document.getElementById(favorito - btn - ${ cocheId });
                     if (action === "add") {
                         button.classList.remove("btn-outline-danger");
                         button.classList.add("btn-danger");
                         button.innerHTML = '<i class="bi-heart-fill"></i>';
-                        button.setAttribute("onclick", `showConfirmModal(${cocheId}, 'remove')`);
+                        button.setAttribute("onclick", showConfirmModal(${ cocheId }, 'remove'));
                     } else {
                         button.classList.remove("btn-danger");
                         button.classList.add("btn-outline-danger");
                         button.innerHTML = '<i class="bi-heart"></i>';
-                        button.setAttribute("onclick", `showConfirmModal(${cocheId}, 'add')`);
+                        button.setAttribute("onclick", showConfirmModal(${ cocheId }, 'add'));
                     }
                 } else {
                     alert("Error: " + result.error);
