@@ -28,9 +28,11 @@ void EliminarValoracion (int idValoracion
 
 
 ValoracionEN ObtenValoracionId (int idValoracion
-                                );
+                        );
 
 
-System.Collections.Generic.IList<ValoracionEN> ObtenerValoraciones (int first, int size);
+System.Collections.Generic.IList<ValoracionEN> ObtenerValoraciones(int first, int size);
+
+System.Collections.Generic.IList<ValoracionEN> ObtenerValoracionesCoche(int id);
 }
 }

@@ -151,5 +151,17 @@ namespace WebRentaCar2.Controllers
                 return View();
             }
         }
+
+        public void CalcularValoracionMedia(CocheViewModel coche)
+        {
+            if (coche.Valoraciones != null && Valoraciones.Count > 0)
+            {
+                valoracion = (int)Valoraciones.Average();
+            }
+            else
+            {
+                valoracion = 0; // O cualquier valor por defecto que consideres apropiado
+            }
+        }
     }
 }
