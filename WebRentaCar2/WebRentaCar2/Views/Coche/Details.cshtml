@@ -188,7 +188,7 @@
                     }
                 </div>
                 <p class="mb-1"><strong>Comentario:</strong> @valoracion.Comentario</p>
-                <p class="mb-1"><strong>Usuario:</strong> @(valoracion.Usuario != null ? valoracion.Usuario.Correo : "Anónimo")</p>
+                <p class="mb-1"><strong>Usuario:</strong> @valoracion?.Usuario?.Correo ?? "Anónimo"</p>
                 <hr />
 
             </div>

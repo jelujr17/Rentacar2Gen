@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using WebRentaCar2.Assemblers;
 using WebRentaCar2.Models;
 using Rentacar2Gen.ApplicationCore.IRepository.RentaCar2;
-using System.Runtime.Intrinsics.X86;
+
 
 namespace WebRentaCar2.Controllers
 {
@@ -21,11 +21,13 @@ namespace WebRentaCar2.Controllers
     {
         private readonly IWebHostEnvironment _webHost;
         private readonly IValoracionRepository _valoracionRepository;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public ValoracionController(IWebHostEnvironment webHost, IValoracionRepository valoracionRepository)
+        public ValoracionController(IWebHostEnvironment webHost, IValoracionRepository valoracionRepository, IUsuarioRepository usuarioRepository)
         {
             _webHost = webHost;
             _valoracionRepository = valoracionRepository;
+            _usuarioRepository = usuarioRepository;
         }
 
         // GET: ValoracionController
@@ -43,24 +45,32 @@ namespace WebRentaCar2.Controllers
         }
 
         // GET: Valoracion/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
             SessionInitialize();
-            ValoracionCEN ValoracionCEN = new ValoracionCEN(_valoracionRepository);
+            ValoracionCEN valoracionCEN = new ValoracionCEN(_valoracionRepository);
 
-            ValoracionEN valoracionEN = ValoracionCEN.ObtenValoracionId(id);
+            ValoracionEN valoracionEN = valoracionCEN.ObtenValoracionId(id);
             ValoracionViewModel? valoracionView = null;
             if (valoracionEN != null)
+            {
+                if (valoracionEN.Usuario == null)
+                {
+                    // Log or handle the case where Usuario is null
+                    Console.WriteLine("Usuario is null");
+                    return RedirectToAction("Index", "Coche");
+
+                }
                 valoracionView = new ValoracionAssembler().ConvertirENToViewModel(valoracionEN);
+            }
 
             SessionClose();
             return View(valoracionView);
         }
 
         // GET: ArticuloController/Create
-        
 
-        [HttpPost]
+
         [HttpPost]
         public IActionResult Create(ValoracionViewModel model)
         {

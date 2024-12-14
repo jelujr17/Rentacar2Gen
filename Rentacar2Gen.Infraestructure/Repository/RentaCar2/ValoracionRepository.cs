@@ -26,9 +26,13 @@ namespace Rentacar2Gen.Infraestructure.Repository.RentaCar2
 
         public void setSessionCP(GenericSessionCP session)
         {
-            sessionInside = false;
             this.session = (ISession)session.CurrentSession;
+            if (this.session == null)
+            {
+                throw new InvalidOperationException("La sesión NHibernate no está inicializada.");
+            }
         }
+
 
         public ValoracionEN ReadOIDDefault(int idValoracion)
         {
@@ -53,28 +57,54 @@ namespace Rentacar2Gen.Infraestructure.Repository.RentaCar2
 
         public System.Collections.Generic.IList<ValoracionEN> ReadAllDefault(int first, int size)
         {
+                            SessionInitializeTransaction();
+
             System.Collections.Generic.IList<ValoracionEN> result = null;
-            try
+
+            if (session == null)
             {
-                using (ITransaction tx = session.BeginTransaction())
-                {
-                    if (size > 0)
-                        result = session.CreateCriteria(typeof(ValoracionNH))
-                                 .SetFirstResult(first).SetMaxResults(size).List<ValoracionEN>();
-                    else
-                        result = session.CreateCriteria(typeof(ValoracionNH)).List<ValoracionEN>();
-                }
+                throw new InvalidOperationException("La sesión NHibernate no está inicializada.");
             }
-            catch (Exception ex)
+
+            using (ITransaction tx = session.BeginTransaction())
             {
-                SessionRollBack();
-                if (ex is Rentacar2Gen.ApplicationCore.Exceptions.ModelException)
-                    throw;
-                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException("Error in ValoracionRepository.", ex);
+                try
+                {
+                    // Verifica si el tamaño es mayor a 0 y ajusta la consulta
+                    if (size > 0)
+                    {
+                        result = session.CreateCriteria(typeof(ValoracionNH))
+                                        .SetFirstResult(first)
+                                        .SetMaxResults(size)
+                                        .List<ValoracionEN>();
+                    }
+                    else
+                    {
+                        result = session.CreateCriteria(typeof(ValoracionNH))
+                                        .List<ValoracionEN>();
+                    }
+
+                    tx.Commit(); // Confirmar la transacción
+                }
+                catch (Exception ex)
+                {
+                    tx.Rollback(); // Revertir la transacción si hay error
+
+                    // Relanzar la excepción con manejo adecuado
+                    if (ex is Rentacar2Gen.ApplicationCore.Exceptions.ModelException)
+                    {
+                        throw;
+                    }
+                    else
+                    {
+                        throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException("Error en ValoracionRepository.", ex);
+                    }
+                }
             }
 
             return result;
         }
+
 
         public void ModifyDefault(ValoracionEN valoracion)
         {

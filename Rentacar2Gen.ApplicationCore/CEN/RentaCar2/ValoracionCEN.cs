@@ -85,7 +85,7 @@ public ValoracionEN ObtenValoracionId (int idValoracion
 {
         ValoracionEN valoracionEN = null;
 
-        valoracionEN = _IValoracionRepository.ObtenValoracionId (idValoracion);
+        valoracionEN = _IValoracionRepository.ReadOIDDefault (idValoracion);
         return valoracionEN;
 }
 
@@ -93,7 +93,7 @@ public System.Collections.Generic.IList<ValoracionEN> ObtenerValoraciones (int f
 {
         System.Collections.Generic.IList<ValoracionEN> list = null;
 
-        list = _IValoracionRepository.ObtenerValoraciones (first, size);
+        list = _IValoracionRepository.ReadAllDefault (first, size);
         return list;
 }
 

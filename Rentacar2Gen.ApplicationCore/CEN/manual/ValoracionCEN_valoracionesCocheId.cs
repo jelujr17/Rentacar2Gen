@@ -20,7 +20,7 @@ public System.Collections.Generic.IList<Rentacar2Gen.ApplicationCore.EN.RentaCar
             /*PROTECTED REGION ID(Rentacar2Gen.ApplicationCore.CEN.RentaCar2_Valoracion_valoracionesCocheId) ENABLED START*/
 
 
-            IList<ValoracionEN> valoracionesEN = ObtenerValoraciones(0, int.MaxValue);
+            IList<ValoracionEN> valoracionesEN = ObtenerValoraciones(0, -1);
             IList<ValoracionEN> valoracionesCoche = new List<ValoracionEN>();
 
             foreach (var valoracion in valoracionesEN)
