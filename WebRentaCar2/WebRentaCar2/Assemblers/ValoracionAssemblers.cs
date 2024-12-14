@@ -18,6 +18,7 @@ namespace WebRentaCar2.Assemblers
             valoracion.Valoracion = en.Valoracion;
             valoracion.Tipo = (WebRentaCar2.Models.TipoValoracion)en.TipoValoracion; // Conversión explícita
             valoracion.IdDestinatario = en.IdDestinatario;
+            valoracion.Usuario = en.Usuario;
 
             return valoracion;
         }

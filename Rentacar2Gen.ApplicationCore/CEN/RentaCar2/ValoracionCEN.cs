@@ -30,7 +30,7 @@ public IValoracionRepository get_IValoracionRepository ()
         return this._IValoracionRepository;
 }
 
-public int NuevaValoracion (string p_comentario, int p_valoracion, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.TipoValoracionEnum p_tipoValoracion, int p_usuario, int p_idDestinatario)
+public int NuevaValoracion (string p_comentario, int p_valoracion, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.TipoValoracionEnum p_tipoValoracion, UsuarioEN p_usuario, int p_idDestinatario)
 {
         ValoracionEN valoracionEN = null;
         int oid;
@@ -44,11 +44,10 @@ public int NuevaValoracion (string p_comentario, int p_valoracion, Rentacar2Gen.
         valoracionEN.TipoValoracion = p_tipoValoracion;
 
 
-        if (p_usuario != -1) {
+        if (p_usuario != null) {
                 // El argumento p_usuario -> Property usuario es oid = false
                 // Lista de oids idValoracion
-                valoracionEN.Usuario = new Rentacar2Gen.ApplicationCore.EN.RentaCar2.UsuarioEN ();
-                valoracionEN.Usuario.IdUsuario = p_usuario;
+                valoracionEN.Usuario = p_usuario;
         }
 
         valoracionEN.IdDestinatario = p_idDestinatario;

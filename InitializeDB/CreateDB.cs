@@ -134,11 +134,11 @@ public static void InitializeData ()
                 int mensaje1 = mensajescen.NuevoMensaje (usuario1, usuario2, "mensaje1", new DateTime (2024, 11, 7));
                 int mensaje2 = mensajescen.NuevoMensaje (usuario2, usuario1, "mensaje2", new DateTime (2024, 11, 7));
                 Console.WriteLine ("Mensajes creados");
-
-                int valoracion1 = valoracioncen.NuevaValoracion ("valoracion1", 5, TipoValoracionEnum.coche, usuario1, coche1);
-                int valoracion2 = valoracioncen.NuevaValoracion ("valoracion2", 3, TipoValoracionEnum.coche, usuario2, coche1);
-                int valoracion3 = valoracioncen.NuevaValoracion ("valoracion3", 3, TipoValoracionEnum.coche, usuario2, coche1);
-                int valoracion4 = valoracioncen.NuevaValoracion ("valoracion4", 5, TipoValoracionEnum.coche, usuario2, coche1);
+                UsuarioEN usuer = usuariocen.ObtenUsuarioId(usuario1);
+                int valoracion1 = valoracioncen.NuevaValoracion ("valoracion1", 5, TipoValoracionEnum.coche, usuer, coche1);
+                int valoracion2 = valoracioncen.NuevaValoracion ("valoracion2", 3, TipoValoracionEnum.coche, usuer, coche1);
+                int valoracion3 = valoracioncen.NuevaValoracion ("valoracion3", 3, TipoValoracionEnum.coche, usuer, coche1);
+                int valoracion4 = valoracioncen.NuevaValoracion ("valoracion4", 5, TipoValoracionEnum.coche, usuer, coche1);
                 Console.WriteLine ("Valoraciones creadas");
 
                 /*FILTROS*/
@@ -270,6 +270,12 @@ public static void InitializeData ()
                 {
                     Console.WriteLine("Coche  no encontrado.");
                 }
+
+
+
+                int valoracionBusqueda = valoracioncen.ValoracionesCocheId(coche1).Count;
+
+                Console.Write("Numero de valoraciones para el coche 1: "+ valoracionBusqueda);
 
                 /*PROTECTED REGION END*/
             }

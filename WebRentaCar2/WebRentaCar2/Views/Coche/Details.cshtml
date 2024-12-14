@@ -18,12 +18,27 @@
         UsuarioRepository usuRepo = new UsuarioRepository();
         UsuarioCEN usuCEN = new UsuarioCEN(usuRepo);
         usuarioEN = usuCEN.GetByCorreo(nombre);
+
     }
 }
 
-
 <div class="container mt-4">
-    <!-- Navegación breadcrumb -->
+    <!-- Mostrar errores de validación al principio de la página -->
+    @if (TempData["Errors"] != null)
+    {
+        var errors = TempData["Errors"] as List<string>;
+        if (errors != null && errors.Any())
+        {
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach (var error in errors)
+                    {
+                        <li>@error</li>
+                    }
+                </ul>
+            </div>
+        }
+    }    <!-- Navegación breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
@@ -62,38 +77,36 @@
             <h3 class="text-danger mb-3">€@Html.DisplayFor(model => model.Precio)</h3>
 
             <div class="mb-3">
-                <div class="mb-3">
-                    <strong>Valoración:</strong>
+                <strong>Valoración:</strong>
 
-                    @if (Model.valoracion != null && Model.valoracion.Any())
-                    {
-                        var promedioValoracion = Model.valoracion.Average(v => v.Valoracion);
-                        <div class="rating">
-                            @for (int i = 1; i <= 5; i++)
+                @if (Model.valoracion != null && Model.valoracion.Any())
+                {
+                    var promedioValoracion = Model.valoracion.Average(v => v.Valoracion);
+                    <div class="rating">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= Math.Floor(promedioValoracion))
                             {
-                                if (i <= Math.Floor(promedioValoracion))
-                                {
-                                    <i class="bi-star-fill text-warning"></i> <!-- Estrella llena -->
-                                }
-                                else if (i - promedioValoracion < 1)
-                                {
-                                    <i class="bi-star-half text-warning"></i> <!-- Estrella media -->
-                                }
-                                else
-                                {
-                                    <i class="bi-star text-warning"></i> <!-- Estrella vacía -->
-                                }
+                                <i class="bi-star-fill text-warning"></i> <!-- Estrella llena -->
                             }
-                            (@Model.valoracion.Count)
-                        </div>
-
-                    }
-                    else
-                    {
-                        <p>No hay valoraciones disponibles.</p>
-                    }
-                </div>
+                            else if (i - promedioValoracion < 1)
+                            {
+                                <i class="bi-star-half text-warning"></i> <!-- Estrella media -->
+                            }
+                            else
+                            {
+                                <i class="bi-star text-warning"></i> <!-- Estrella vacía -->
+                            }
+                        }
+                        (@Model.valoracion.Count)
+                    </div>
+                }
+                else
+                {
+                    <p>No hay valoraciones disponibles. </p>
+                }
             </div>
+
             <p><strong>Plazas:</strong> @Model.Plazas</p>
             <p><strong>Tipo:</strong> @Model.Tipo</p>
             <p><strong>Estado:</strong> @Model.Disponible</p>
@@ -175,8 +188,9 @@
                     }
                 </div>
                 <p class="mb-1"><strong>Comentario:</strong> @valoracion.Comentario</p>
-                <p class="mb-1"><strong>Usuario:</strong> @valoracion.Usuario?.Correo ?? "Anónimo"</p>
+                <p class="mb-1"><strong>Usuario:</strong> @(valoracion.Usuario != null ? valoracion.Usuario.Correo : "Anónimo")</p>
                 <hr />
+
             </div>
         }
     }
@@ -184,11 +198,13 @@
     {
         <p>No hay valoraciones disponibles para este coche.</p>
     }
-
+    @if(usuario != null){
     <!-- Botón para añadir una valoración -->
     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addRatingModal">
         Añadir valoración
     </button>
+    }
+    
 </div>
 
 <!-- Modal para añadir valoración -->
@@ -200,10 +216,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="ratingForm">
+                <form id="ratingForm" method="post" action="/Valoracion/Create">
                     <div class="mb-3">
                         <label for="ratingValue" class="form-label">Puntuación:</label>
-                        <select id="ratingValue" class="form-select">
+                        <select id="ratingValue" name="Valoracion" class="form-select">
                             <option value="1">1 estrella</option>
                             <option value="2">2 estrellas</option>
                             <option value="3">3 estrellas</option>
@@ -213,17 +229,43 @@
                     </div>
                     <div class="mb-3">
                         <label for="ratingComment" class="form-label">Comentario:</label>
-                        <textarea id="ratingComment" class="form-control" rows="3"></textarea>
+                        <textarea id="ratingComment" name="Comentario" class="form-control" rows="3"></textarea>
                     </div>
+                    <input type="hidden" name="IdDestinatario" value="@Model.Id" />
+                    <input type="hidden" name="Usuario" value="@usuario" />
+                    <input type="hidden" id="verificationField" name="VerificationField" value="ValoracionCreada" />
                 </form>
+                <!-- Mostrar errores de validación -->
+                @if (ViewBag.Errors != null && ViewBag.Errors.Count > 0)
+                {
+                    <div class="alert alert-danger mt-3">
+                        <ul>
+                            @foreach (var error in ViewBag.Errors)
+                            {
+                                <li>@error</li>
+                            }
+                        </ul>
+                    </div>
+                }
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="submitRating()">Enviar</button>
+                <button type="submit" form="ratingForm" class="btn btn-primary">Enviar</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Mensaje de confirmación -->
+@if (ViewBag.VerificationMessage != null)
+{
+    <div class="alert alert-success mt-3">
+        @ViewBag.VerificationMessage
+    </div>
+}
+
+
+
 
 
 <!-- Modal de confirmación -->

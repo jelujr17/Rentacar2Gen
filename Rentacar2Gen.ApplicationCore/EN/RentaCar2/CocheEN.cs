@@ -89,11 +89,15 @@ private Rentacar2Gen.ApplicationCore.EN.RentaCar2.ReservaEN reservaActiva;
 
 
 
+/**
+    *	Atributo valoracion
+    */
+private System.Collections.Generic.IList<Rentacar2Gen.ApplicationCore.EN.RentaCar2.ValoracionEN> valoracion;
 
 
 
 public virtual int Id {
-        get { return id; } set { id = value;  }
+get { return id; } set { id = value;  }
 }
 
 
@@ -163,30 +167,37 @@ public virtual Rentacar2Gen.ApplicationCore.EN.RentaCar2.ReservaEN ReservaActiva
 }
 
 
+public virtual System.Collections.Generic.IList<Rentacar2Gen.ApplicationCore.EN.RentaCar2.ValoracionEN> Valoracion
+{
+
+    get { return valoracion; }
+    set { valoracion = value; }
+}
 
 
 
 public CocheEN()
 {
         usuarioFavorito = new System.Collections.Generic.List<Rentacar2Gen.ApplicationCore.EN.RentaCar2.UsuarioEN>();
-}
+        valoracion = new System.Collections.Generic.List<Rentacar2Gen.ApplicationCore.EN.RentaCar2.ValoracionEN>();
+    }
 
 
 
-public CocheEN(int id, string matricula, string imagenes, double precio, int plazas, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.TipoEnum tipo, string descripcion, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.EstadoEnum disponible, Rentacar2Gen.ApplicationCore.EN.RentaCar2.UsuarioEN propietario, System.Collections.Generic.IList<Rentacar2Gen.ApplicationCore.EN.RentaCar2.UsuarioEN> usuarioFavorito, Rentacar2Gen.ApplicationCore.EN.RentaCar2.MarcaEN marca, Rentacar2Gen.ApplicationCore.EN.RentaCar2.ReservaEN reservaActiva
-               )
+public CocheEN(int id, string matricula, string imagenes, double precio, int plazas, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.TipoEnum tipo, string descripcion, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.EstadoEnum disponible, Rentacar2Gen.ApplicationCore.EN.RentaCar2.UsuarioEN propietario, System.Collections.Generic.IList<Rentacar2Gen.ApplicationCore.EN.RentaCar2.UsuarioEN> usuarioFavorito, Rentacar2Gen.ApplicationCore.EN.RentaCar2.MarcaEN marca, Rentacar2Gen.ApplicationCore.EN.RentaCar2.ReservaEN reservaActiva, System.Collections.Generic.IList<Rentacar2Gen.ApplicationCore.EN.RentaCar2.ValoracionEN> valoracion
+        )
 {
-        this.init (Id, matricula, imagenes, precio, plazas, tipo, descripcion, disponible, propietario, usuarioFavorito, marca, reservaActiva);
+this.init (Id, matricula, imagenes, precio, plazas, tipo, descripcion, disponible, propietario, usuarioFavorito, marca, reservaActiva, valoracion);
 }
 
 
 public CocheEN(CocheEN coche)
 {
-        this.init (coche.Id, coche.Matricula, coche.Imagenes, coche.Precio, coche.Plazas, coche.Tipo, coche.Descripcion, coche.Disponible, coche.Propietario, coche.UsuarioFavorito, coche.Marca, coche.ReservaActiva);
+        this.init (coche.Id, coche.Matricula, coche.Imagenes, coche.Precio, coche.Plazas, coche.Tipo, coche.Descripcion, coche.Disponible, coche.Propietario, coche.UsuarioFavorito, coche.Marca, coche.ReservaActiva, coche.Valoracion);
 }
 
 private void init (int id
-                   , string matricula, string imagenes, double precio, int plazas, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.TipoEnum tipo, string descripcion, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.EstadoEnum disponible, Rentacar2Gen.ApplicationCore.EN.RentaCar2.UsuarioEN propietario, System.Collections.Generic.IList<Rentacar2Gen.ApplicationCore.EN.RentaCar2.UsuarioEN> usuarioFavorito, Rentacar2Gen.ApplicationCore.EN.RentaCar2.MarcaEN marca, Rentacar2Gen.ApplicationCore.EN.RentaCar2.ReservaEN reservaActiva)
+                   , string matricula, string imagenes, double precio, int plazas, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.TipoEnum tipo, string descripcion, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.EstadoEnum disponible, Rentacar2Gen.ApplicationCore.EN.RentaCar2.UsuarioEN propietario, System.Collections.Generic.IList<Rentacar2Gen.ApplicationCore.EN.RentaCar2.UsuarioEN> usuarioFavorito, Rentacar2Gen.ApplicationCore.EN.RentaCar2.MarcaEN marca, Rentacar2Gen.ApplicationCore.EN.RentaCar2.ReservaEN reservaActiva, System.Collections.Generic.IList<Rentacar2Gen.ApplicationCore.EN.RentaCar2.ValoracionEN> valoracion)
 {
         this.Id = id;
 
@@ -212,6 +223,8 @@ private void init (int id
         this.Marca = marca;
 
         this.ReservaActiva = reservaActiva;
+
+        this.Valoracion = valoracion;
 }
 
 public override bool Equals (object obj)

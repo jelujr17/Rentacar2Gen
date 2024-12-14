@@ -31,17 +31,7 @@ namespace WebRentaCar2.Models
         [Range(0, 5, ErrorMessage = "La valoracion debe de estar ente 0 y 5")]
         public int Valoracion { get; set; }
 
-        [Display(Prompt = "Número de plazas", Description = "Cantidad de plazas del coche", Name = "Plazas")]
-        [Required(ErrorMessage = "Debe indicar la cantidad de plazas del coche")]
-        [Range(2, 8, ErrorMessage = "El número de plazas debe estar entre 2 y 8")]
-        public int Plazas { get; set; }
-
-
-        [Display(Prompt = "Describe el coche", Description = "Descripción del coche", Name = "Descripción")]
-        [StringLength(500, ErrorMessage = "La descripción no puede tener más de 500 caracteres")]
-        public string? Descripcion { get; set; }
-
-   
+        public  UsuarioEN Usuario { get; set; }
         public TipoValoracion Tipo{ get; set; }
 
 

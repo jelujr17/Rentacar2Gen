@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using WebRentaCar2.Assemblers;
 using WebRentaCar2.Models;
 using Rentacar2Gen.ApplicationCore.IRepository.RentaCar2;
+using System.Runtime.Intrinsics.X86;
 
 namespace WebRentaCar2.Controllers
 {
@@ -57,27 +58,52 @@ namespace WebRentaCar2.Controllers
         }
 
         // GET: ArticuloController/Create
-        public ActionResult CreateConTipo()
-        {
-            return View();
-        }
+        
 
-        // POST: ArticuloController/Create
         [HttpPost]
-        public async Task<ActionResult> CreateAsync(int idUsuario, ValoracionViewModel valoracion)
+        [HttpPost]
+        public IActionResult Create(ValoracionViewModel model)
         {
-           
             try
             {
-                ValoracionCEN ValoracionCEN = new ValoracionCEN(_valoracionRepository);
-                ValoracionCEN.NuevaValoracion(valoracion.Comentario, valoracion.Valoracion, (Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.TipoValoracionEnum)valoracion.Tipo, idUsuario, valoracion.IdDestinatario);
-                return RedirectToAction(nameof(Index));
+                SessionInitialize();
+
+               
+                    ValoracionCEN valoracionCEN = new ValoracionCEN(_valoracionRepository);
+
+                    ValoracionEN valoracionEN = new ValoracionEN
+                    {
+                        Comentario = model.Comentario,
+                        Valoracion = model.Valoracion,
+                        TipoValoracion = (Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.TipoValoracionEnum)model.Tipo,
+                        IdDestinatario = model.IdDestinatario,
+                        Usuario = model.Usuario
+                    };
+
+                    // Crear nueva valoración
+                    int aux = valoracionCEN.NuevaValoracion(
+                        valoracionEN.Comentario,
+                        valoracionEN.Valoracion,
+                        valoracionEN.TipoValoracion,
+                        valoracionEN.Usuario,
+                        valoracionEN.IdDestinatario);
+
+                    // Redirigir a los detalles del destinatario
+                    return RedirectToAction("Details", "Coche", new { id = model.IdDestinatario });
+                
+
             }
-            catch
+
+            finally
             {
-                return View();
+                // Asegurarse de cerrar la sesión
+                SessionClose();
             }
         }
+
+
+
+
 
         // GET: ValoracionCOntroller/Edit/5
         public ActionResult Edit(int id)

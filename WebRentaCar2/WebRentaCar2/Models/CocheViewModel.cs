@@ -76,7 +76,7 @@ namespace WebRentaCar2.Models
         [ScaffoldColumn(false)]
         public List<string> UsuariosFavoritos { get; set; } = new List<string>();
 
-        public IList<ValoracionEN>? valoracion { get; set; }
+        public IList<ValoracionEN> valoracion { get; set; }
 
         
     }

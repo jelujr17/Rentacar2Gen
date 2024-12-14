@@ -55,30 +55,29 @@ namespace WebRentaCar2.Controllers
 
             try
             {
+                // Comprobar si el usuario está en la sesión
+                var usuario = HttpContext.Session.Get<UsuarioViewModel>("usuario");
+                if (usuario == null)
+                {
+                    return Unauthorized("Usuario no autenticado.");
+                }
+
                 SessionInitialize();
                 CocheCEN cocheCEN = new CocheCEN(_cocheRepository);
                 ValoracionCEN valoracionCEN = new ValoracionCEN(_valoracionRepository);
                 UsuarioCEN usuarioCEN = new UsuarioCEN(_usuarioRepository);
 
                 // Obtener el coche por ID
-                CocheEN cocheEN = cocheCEN.ObtenCocheId(id);
+                CocheEN cocheEN = _cocheRepository.ReadOIDDefault(id);
                 if (cocheEN == null)
                 {
                     return StatusCode(StatusCodes.Status404NotFound, "Coche no encontrado.");
                 }
-
-                // Obtener las valoraciones del coche por ID
                 IList<ValoracionEN> valoracionEN = valoracionCEN.ValoracionesCocheId(id) ?? new List<ValoracionEN>();
-
-                // Cargar los usuarios asociados a las valoraciones
-                foreach (var valoracion in valoracionEN)
-                {
-                    valoracion.Usuario = usuarioCEN.ObtenUsuarioId(valoracion.Usuario.IdUsuario);
-                }
+                cocheEN.Valoracion = valoracionEN;
 
                 // Convertir el coche a ViewModel
                 CocheViewModel cocheView = new CocheAssembler().ConvertirENToViewModel(cocheEN);
-                cocheView.valoracion = valoracionEN;
 
                 return View(cocheView);
             }
@@ -96,6 +95,7 @@ namespace WebRentaCar2.Controllers
                 SessionClose();
             }
         }
+
 
 
 
@@ -161,7 +161,7 @@ namespace WebRentaCar2.Controllers
             try
             {
                 CocheCEN cocheCEN = new CocheCEN(_cocheRepository);
-                cocheCEN.Modificar(id, coche.Matricula, coche.ImagenUrl, coche.Precio, coche.Plazas, (Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.TipoEnum)coche.Tipo, coche.Descripcion, (Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.EstadoEnum)coche.Disponible);
+                cocheCEN.Modificar(id, coche.Matricula, coche.ImagenUrl, coche.Precio, coche.Plazas, (Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.TipoEnum)coche.Tipo, coche.Descripcion, (Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.EstadoEnum)coche.Disponible, coche.valoracion);
                 return RedirectToAction(nameof(Index));
             }
             catch

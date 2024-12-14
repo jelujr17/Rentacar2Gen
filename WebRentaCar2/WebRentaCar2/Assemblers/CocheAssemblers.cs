@@ -23,6 +23,7 @@ namespace WebRentaCar2.Assemblers
             coche.ImagenUrl = en.Imagenes; // Asignar a ImagenUrl en lugar de Imagen
             coche.Propietario = en.Propietario.IdUsuario; // Usar Correo en lugar de Nombre
             coche.Marca = en.Marca.IdMarca; // Obtener el nombre de la marca
+            coche.valoracion = en.Valoracion;
 
             return coche;
         }

@@ -12,273 +12,227 @@ using Rentacar2Gen.ApplicationCore.CP.RentaCar2;
 using Rentacar2Gen.Infraestructure.EN.RentaCar2;
 using NHibernate.Loader.Custom;
 
-
-/*
- * Clase Valoracion:
- *
- */
-
 namespace Rentacar2Gen.Infraestructure.Repository.RentaCar2
 {
-public partial class ValoracionRepository : BasicRepository, IValoracionRepository
-{
-public ValoracionRepository() : base ()
-{
-}
-
-
-public ValoracionRepository(GenericSessionCP sessionAux) : base (sessionAux)
-{
-}
-
-
-public void setSessionCP (GenericSessionCP session)
-{
-        sessionInside = false;
-        this.session = (ISession)session.CurrentSession;
-}
-
-
-public ValoracionEN ReadOIDDefault (int idValoracion
-                                    )
-{
-        ValoracionEN valoracionEN = null;
-
-        try
+    public partial class ValoracionRepository : BasicRepository, IValoracionRepository
+    {
+        public ValoracionRepository() : base()
         {
-                SessionInitializeTransaction ();
-                valoracionEN = (ValoracionEN)session.Get (typeof(ValoracionNH), idValoracion);
-                SessionCommit ();
         }
 
-        catch (Exception) {
+        public ValoracionRepository(GenericSessionCP sessionAux) : base(sessionAux)
+        {
         }
 
-
-        finally
+        public void setSessionCP(GenericSessionCP session)
         {
-                SessionClose ();
+            sessionInside = false;
+            this.session = (ISession)session.CurrentSession;
         }
 
-        return valoracionEN;
-}
-
-public System.Collections.Generic.IList<ValoracionEN> ReadAllDefault (int first, int size)
-{
-        System.Collections.Generic.IList<ValoracionEN> result = null;
-        try
+        public ValoracionEN ReadOIDDefault(int idValoracion)
         {
-                using (ITransaction tx = session.BeginTransaction ())
+            ValoracionEN valoracionEN = null;
+
+            try
+            {
+                SessionInitializeTransaction();
+                valoracionEN = (ValoracionEN)session.Get(typeof(ValoracionNH), idValoracion);
+                SessionCommit();
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                SessionClose();
+            }
+
+            return valoracionEN;
+        }
+
+        public System.Collections.Generic.IList<ValoracionEN> ReadAllDefault(int first, int size)
+        {
+            System.Collections.Generic.IList<ValoracionEN> result = null;
+            try
+            {
+                using (ITransaction tx = session.BeginTransaction())
                 {
-                        if (size > 0)
-                                result = session.CreateCriteria (typeof(ValoracionNH)).
-                                         SetFirstResult (first).SetMaxResults (size).List<ValoracionEN>();
-                        else
-                                result = session.CreateCriteria (typeof(ValoracionNH)).List<ValoracionEN>();
+                    if (size > 0)
+                        result = session.CreateCriteria(typeof(ValoracionNH))
+                                 .SetFirstResult(first).SetMaxResults(size).List<ValoracionEN>();
+                    else
+                        result = session.CreateCriteria(typeof(ValoracionNH)).List<ValoracionEN>();
                 }
-        }
-
-        catch (Exception ex) {
-                SessionRollBack ();
+            }
+            catch (Exception ex)
+            {
+                SessionRollBack();
                 if (ex is Rentacar2Gen.ApplicationCore.Exceptions.ModelException)
-                        throw;
-                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException ("Error in ValoracionRepository.", ex);
+                    throw;
+                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException("Error in ValoracionRepository.", ex);
+            }
+
+            return result;
         }
 
-        return result;
-}
-
-// Modify default (Update all attributes of the class)
-
-public void ModifyDefault (ValoracionEN valoracion)
-{
-        try
+        public void ModifyDefault(ValoracionEN valoracion)
         {
-                SessionInitializeTransaction ();
-                ValoracionNH valoracionNH = (ValoracionNH)session.Load (typeof(ValoracionNH), valoracion.IdValoracion);
+            try
+            {
+                SessionInitializeTransaction();
+                ValoracionNH valoracionNH = (ValoracionNH)session.Load(typeof(ValoracionNH), valoracion.IdValoracion);
 
                 valoracionNH.Comentario = valoracion.Comentario;
-
-
                 valoracionNH.Valoracion = valoracion.Valoracion;
-
-
                 valoracionNH.TipoValoracion = valoracion.TipoValoracion;
-
-
-
                 valoracionNH.IdDestinatario = valoracion.IdDestinatario;
 
-                session.Update (valoracionNH);
-                SessionCommit ();
-        }
-
-        catch (Exception ex) {
-                SessionRollBack ();
+                session.Update(valoracionNH);
+                SessionCommit();
+            }
+            catch (Exception ex)
+            {
+                SessionRollBack();
                 if (ex is Rentacar2Gen.ApplicationCore.Exceptions.ModelException)
-                        throw;
-                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException ("Error in ValoracionRepository.", ex);
+                    throw;
+                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException("Error in ValoracionRepository.", ex);
+            }
+            finally
+            {
+                SessionClose();
+            }
         }
 
-
-        finally
+        public int NuevaValoracion(ValoracionEN valoracion)
         {
-                SessionClose ();
-        }
-}
+            ValoracionNH valoracionNH = new ValoracionNH(valoracion);
 
-
-public int NuevaValoracion (ValoracionEN valoracion)
-{
-        ValoracionNH valoracionNH = new ValoracionNH (valoracion);
-
-        try
-        {
-                SessionInitializeTransaction ();
-                if (valoracion.Usuario != null) {
-                        // Argumento OID y no colección.
-                        valoracionNH
-                        .Usuario = (Rentacar2Gen.ApplicationCore.EN.RentaCar2.UsuarioEN)session.Load (typeof(Rentacar2Gen.ApplicationCore.EN.RentaCar2.UsuarioEN), valoracion.Usuario.IdUsuario);
-
-                        valoracionNH.Usuario.Valoracion
-                        .Add (valoracionNH);
+            try
+            {
+                SessionInitializeTransaction();
+                if (valoracion.Usuario != null)
+                {
+                    valoracionNH.Usuario = valoracion.Usuario;
                 }
 
-                session.Save (valoracionNH);
-                SessionCommit ();
-        }
-
-        catch (Exception ex) {
-                SessionRollBack ();
+                session.Save(valoracionNH);
+                SessionCommit();
+            }
+            catch (Exception ex)
+            {
+                SessionRollBack();
                 if (ex is Rentacar2Gen.ApplicationCore.Exceptions.ModelException)
-                        throw;
-                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException ("Error in ValoracionRepository.", ex);
+                    throw;
+                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException("Error in ValoracionRepository.", ex);
+            }
+            finally
+            {
+                SessionClose();
+            }
+
+            return valoracionNH.IdValoracion;
         }
 
-
-        finally
+        public void Modificar(ValoracionEN valoracion)
         {
-                SessionClose ();
-        }
-
-        return valoracionNH.IdValoracion;
-}
-
-public void Modificar (ValoracionEN valoracion)
-{
-        try
-        {
-                SessionInitializeTransaction ();
-                ValoracionNH valoracionNH = (ValoracionNH)session.Load (typeof(ValoracionNH), valoracion.IdValoracion);
+            try
+            {
+                SessionInitializeTransaction();
+                ValoracionNH valoracionNH = (ValoracionNH)session.Load(typeof(ValoracionNH), valoracion.IdValoracion);
 
                 valoracionNH.Comentario = valoracion.Comentario;
-
-
                 valoracionNH.Valoracion = valoracion.Valoracion;
-
-
                 valoracionNH.TipoValoracion = valoracion.TipoValoracion;
-
-
                 valoracionNH.IdDestinatario = valoracion.IdDestinatario;
 
-                session.Update (valoracionNH);
-                SessionCommit ();
-        }
-
-        catch (Exception ex) {
-                SessionRollBack ();
+                session.Update(valoracionNH);
+                SessionCommit();
+            }
+            catch (Exception ex)
+            {
+                SessionRollBack();
                 if (ex is Rentacar2Gen.ApplicationCore.Exceptions.ModelException)
-                        throw;
-                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException ("Error in ValoracionRepository.", ex);
+                    throw;
+                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException("Error in ValoracionRepository.", ex);
+            }
+            finally
+            {
+                SessionClose();
+            }
         }
 
-
-        finally
+        public void EliminarValoracion(int idValoracion)
         {
-                SessionClose ();
-        }
-}
-public void EliminarValoracion (int idValoracion
-                                )
-{
-        try
-        {
-                SessionInitializeTransaction ();
-                ValoracionNH valoracionNH = (ValoracionNH)session.Load (typeof(ValoracionNH), idValoracion);
-                session.Delete (valoracionNH);
-                SessionCommit ();
-        }
-
-        catch (Exception ex) {
-                SessionRollBack ();
+            try
+            {
+                SessionInitializeTransaction();
+                ValoracionNH valoracionNH = (ValoracionNH)session.Load(typeof(ValoracionNH), idValoracion);
+                session.Delete(valoracionNH);
+                SessionCommit();
+            }
+            catch (Exception ex)
+            {
+                SessionRollBack();
                 if (ex is Rentacar2Gen.ApplicationCore.Exceptions.ModelException)
-                        throw;
-                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException ("Error in ValoracionRepository.", ex);
+                    throw;
+                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException("Error in ValoracionRepository.", ex);
+            }
+            finally
+            {
+                SessionClose();
+            }
         }
 
-
-        finally
+        public ValoracionEN ObtenValoracionId(int idValoracion)
         {
-                SessionClose ();
+            ValoracionEN valoracionEN = null;
+
+            try
+            {
+                SessionInitializeTransaction();
+                valoracionEN = (ValoracionEN)session.Get(typeof(ValoracionNH), idValoracion);
+                SessionCommit();
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                SessionClose();
+            }
+
+            return valoracionEN;
         }
-}
 
-//Sin e: ObtenValoracionId
-//Con e: ValoracionEN
-public ValoracionEN ObtenValoracionId (int idValoracion
-                                       )
-{
-        ValoracionEN valoracionEN = null;
-
-        try
+        public System.Collections.Generic.IList<ValoracionEN> ObtenerValoraciones(int first, int size)
         {
-                SessionInitializeTransaction ();
-                valoracionEN = (ValoracionEN)session.Get (typeof(ValoracionNH), idValoracion);
-                SessionCommit ();
-        }
-
-        catch (Exception) {
-        }
-
-
-        finally
-        {
-                SessionClose ();
-        }
-
-        return valoracionEN;
-}
-
-public System.Collections.Generic.IList<ValoracionEN> ObtenerValoraciones (int first, int size)
-{
-        System.Collections.Generic.IList<ValoracionEN> result = null;
-        try
-        {
-                SessionInitializeTransaction ();
+            System.Collections.Generic.IList<ValoracionEN> result = null;
+            try
+            {
+                SessionInitializeTransaction();
                 if (size > 0)
-                        result = session.CreateCriteria (typeof(ValoracionNH)).
-                                 SetFirstResult (first).SetMaxResults (size).List<ValoracionEN>();
+                    result = session.CreateCriteria(typeof(ValoracionNH))
+                             .SetFirstResult(first).SetMaxResults(size).List<ValoracionEN>();
                 else
-                        result = session.CreateCriteria (typeof(ValoracionNH)).List<ValoracionEN>();
-                SessionCommit ();
-        }
-
-        catch (Exception ex) {
-                SessionRollBack ();
+                    result = session.CreateCriteria(typeof(ValoracionNH)).List<ValoracionEN>();
+                SessionCommit();
+            }
+            catch (Exception ex)
+            {
+                SessionRollBack();
                 if (ex is Rentacar2Gen.ApplicationCore.Exceptions.ModelException)
-                        throw;
-                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException ("Error in ValoracionRepository.", ex);
+                    throw;
+                else throw new Rentacar2Gen.ApplicationCore.Exceptions.DataLayerException("Error in ValoracionRepository.", ex);
+            }
+            finally
+            {
+                SessionClose();
+            }
+
+            return result;
         }
 
-
-        finally
-        {
-                SessionClose ();
-        }
-
-        return result;
-}
         public System.Collections.Generic.IList<ValoracionEN> ObtenerValoracionesCoche(int id)
         {
             System.Collections.Generic.IList<ValoracionEN> result = null;
@@ -307,6 +261,5 @@ public System.Collections.Generic.IList<ValoracionEN> ObtenerValoraciones (int f
 
             return result;
         }
-        }
-   
+    }
 }

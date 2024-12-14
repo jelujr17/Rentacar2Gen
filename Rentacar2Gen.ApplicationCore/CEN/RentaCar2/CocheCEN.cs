@@ -30,7 +30,7 @@ public ICocheRepository get_ICocheRepository ()
         return this._ICocheRepository;
 }
 
-public void Modificar (int p_Coche_OID, string p_matricula, string p_imagenes, double p_precio, int p_plazas, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.TipoEnum p_tipo, string p_descripcion, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.EstadoEnum p_disponible)
+public void Modificar (int p_Coche_OID, string p_matricula, string p_imagenes, double p_precio, int p_plazas, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.TipoEnum p_tipo, string p_descripcion, Rentacar2Gen.ApplicationCore.Enumerated.RentaCar2.EstadoEnum p_disponible, System.Collections.Generic.IList<Rentacar2Gen.ApplicationCore.EN.RentaCar2.ValoracionEN> p_valoracion)
 {
         CocheEN cocheEN = null;
 
@@ -44,6 +44,7 @@ public void Modificar (int p_Coche_OID, string p_matricula, string p_imagenes, d
         cocheEN.Tipo = p_tipo;
         cocheEN.Descripcion = p_descripcion;
         cocheEN.Disponible = p_disponible;
+            cocheEN.Valoracion = p_valoracion;
         //Call to CocheRepository
 
         _ICocheRepository.Modificar (cocheEN);
