@@ -2,10 +2,7 @@
 using Rentacar2Gen.ApplicationCore.CEN.RentaCar2;
 using Rentacar2Gen.ApplicationCore.EN.RentaCar2;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebRentaCar2.Models
 {
@@ -15,10 +12,8 @@ namespace WebRentaCar2.Models
         usuario
     }
 
-
     public class ValoracionViewModel
     {
-
         [ScaffoldColumn(false)]
         public int IdValoracion { get; set; }
 
@@ -28,14 +23,12 @@ namespace WebRentaCar2.Models
 
         [Display(Prompt = "Introduce la valoración", Description = "Valoracion", Name = "Valoracion")]
         [Required(ErrorMessage = "Debe indicar la valoración")]
-        [Range(0, 5, ErrorMessage = "La valoracion debe de estar ente 0 y 5")]
+        [Range(0, 5, ErrorMessage = "La valoración debe de estar entre 0 y 5")]
         public int Valoracion { get; set; }
 
-        public  UsuarioEN Usuario { get; set; }
-        public TipoValoracion Tipo{ get; set; }
-
+        public UsuarioEN Usuario { get; set; }
+        public TipoValoracion Tipo { get; set; }
 
         public int IdDestinatario { get; set; }
-
     }
 }

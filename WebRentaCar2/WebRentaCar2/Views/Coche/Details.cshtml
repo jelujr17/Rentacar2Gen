@@ -188,7 +188,7 @@
                     }
                 </div>
                 <p class="mb-1"><strong>Comentario:</strong> @valoracion.Comentario</p>
-                <p class="mb-1"><strong>Usuario:</strong> @valoracion?.Usuario?.Correo ?? "Anónimo"</p>
+                <p class="mb-1"><strong>Usuario:</strong> @valoracion?.Usuario?.Correo"</p>
                 <hr />
 
             </div>
@@ -207,6 +207,7 @@
     
 </div>
 
+
 <!-- Modal para añadir valoración -->
 <div class="modal fade" id="addRatingModal" tabindex="-1" aria-labelledby="addRatingModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -216,53 +217,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="ratingForm" method="post" action="/Valoracion/Create">
-                    <div class="mb-3">
-                        <label for="ratingValue" class="form-label">Puntuación:</label>
-                        <select id="ratingValue" name="Valoracion" class="form-select">
-                            <option value="1">1 estrella</option>
-                            <option value="2">2 estrellas</option>
-                            <option value="3">3 estrellas</option>
-                            <option value="4">4 estrellas</option>
-                            <option value="5">5 estrellas</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="ratingComment" class="form-label">Comentario:</label>
-                        <textarea id="ratingComment" name="Comentario" class="form-control" rows="3"></textarea>
-                    </div>
-                    <input type="hidden" name="IdDestinatario" value="@Model.Id" />
-                    <input type="hidden" name="Usuario" value="@usuario" />
-                    <input type="hidden" id="verificationField" name="VerificationField" value="ValoracionCreada" />
-                </form>
-                <!-- Mostrar errores de validación -->
-                @if (ViewBag.Errors != null && ViewBag.Errors.Count > 0)
-                {
-                    <div class="alert alert-danger mt-3">
-                        <ul>
-                            @foreach (var error in ViewBag.Errors)
-                            {
-                                <li>@error</li>
-                            }
-                        </ul>
-                    </div>
-                }
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" form="ratingForm" class="btn btn-primary">Enviar</button>
+                @Html.Partial("~/Views/Valoracion/Create.cshtml", new WebRentaCar2.Models.ValoracionViewModel { IdDestinatario = Model.Id })
             </div>
         </div>
     </div>
 </div>
 
-<!-- Mensaje de confirmación -->
-@if (ViewBag.VerificationMessage != null)
-{
-    <div class="alert alert-success mt-3">
-        @ViewBag.VerificationMessage
-    </div>
-}
 
 
 
