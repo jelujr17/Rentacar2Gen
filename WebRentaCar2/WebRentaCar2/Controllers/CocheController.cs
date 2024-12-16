@@ -22,13 +22,15 @@ namespace WebRentaCar2.Controllers
         private readonly ICocheRepository _cocheRepository;
         private readonly IValoracionRepository _valoracionRepository;
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IMarcaRepository _marcaRepository;
 
-        public CocheController(IWebHostEnvironment webHost, ICocheRepository cocheRepository, IValoracionRepository valoracionRepository, IUsuarioRepository usuarioRepository)
+        public CocheController(IWebHostEnvironment webHost, ICocheRepository cocheRepository, IValoracionRepository valoracionRepository, IUsuarioRepository usuarioRepository, IMarcaRepository marcaRepository)
         {
             _webHost = webHost;
             _cocheRepository = cocheRepository;
             _valoracionRepository = valoracionRepository;
             _usuarioRepository = usuarioRepository;
+            _marcaRepository = marcaRepository;
         }
 
         // GET: CocheController
@@ -76,8 +78,32 @@ namespace WebRentaCar2.Controllers
             }
             cocheEN.Valoracion = valoracionEN;
 
+            UsuarioCEN usuarioCEN = new UsuarioCEN(_usuarioRepository);
+
             // Convertir el coche a ViewModel
             CocheViewModel cocheView = new CocheAssembler().ConvertirENToViewModel(cocheEN);
+
+            var propietario = usuarioCEN.ObtenUsuarioId(cocheView.Propietario);
+            string propietarioCorreo = propietario?.Correo ?? "Correo no disponible";
+            int? propietarioTelefono = propietario?.Telefono;
+            IList<ValoracionEN> valoracionENUsuario = valoracionCEN.ValoracionesUsuarioId(cocheView.Propietario) ?? new List<ValoracionEN>();
+
+            ViewBag.PropietarioCorreo = propietarioCorreo;
+            ViewBag.PropietarioTelefono = propietarioTelefono;
+            ViewBag.Valoraciones = valoracionENUsuario;
+            ViewBag.IdPropietario = propietario?.IdUsuario;
+
+
+
+            MarcaCEN marcaCEN = new MarcaCEN(_marcaRepository);
+
+            var marca = _marcaRepository.ReadOIDDefault(cocheView.Marca);
+            string marcaNombre = marca?.Nombre ?? "Marca no disponible";
+
+            ViewBag.MarcaNombre = marcaNombre;
+
+            // Asignar el nombre del tipo del coche al ViewBag
+            ViewBag.TipoNombre = cocheView.Tipo.ToString();
 
             // Cerrar la sesión
             SessionClose();
@@ -85,6 +111,7 @@ namespace WebRentaCar2.Controllers
             // Devolver la vista con el modelo
             return View(cocheView);
         }
+
 
 
 

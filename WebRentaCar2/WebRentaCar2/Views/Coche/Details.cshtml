@@ -110,8 +110,8 @@
             <p><strong>Plazas:</strong> @Model.Plazas</p>
             <p><strong>Tipo:</strong> @Model.Tipo</p>
             <p><strong>Estado:</strong> @Model.Disponible</p>
-            <p><strong>Propietario:</strong> @Model.Propietario</p>
-            <p><strong>Marca:</strong> @Model.Marca</p>
+            <p><strong>Propietario:</strong> <a href="#" data-bs-toggle="modal" data-bs-target="#propietarioModal">@ViewBag.PropietarioCorreo</a></p>
+            <p><strong>Marca:</strong> @ViewBag.MarcaNombre</p>
         </div>
 
         <div class="d-flex align-items-center mb-3">
@@ -135,6 +135,76 @@
         </small>
     </div>
 </div>
+<!-- Modal para mostrar información del propietario -->
+<div class="modal fade" id="propietarioModal" tabindex="-1" aria-labelledby="propietarioModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="propietarioModalLabel">Información del Propietario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Correo:</strong> @ViewBag.PropietarioCorreo</p>
+                <p><strong>Teléfono:</strong> @ViewBag.PropietarioTelefono</p>
+                @if (ViewBag.Valoraciones != null && ((IEnumerable<dynamic>)ViewBag.Valoraciones).Any())
+                {
+                    var valoraciones = ((IEnumerable<dynamic>)ViewBag.Valoraciones).Cast<dynamic>();
+                    var promedioValoracion = valoraciones.Average(v => (double)v.Valoracion);
+                    <div class="rating">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= Math.Floor(promedioValoracion))
+                            {
+                                <i class="bi-star-fill text-warning"></i> <!-- Estrella llena -->
+                            }
+                            else if (i - promedioValoracion < 1)
+                            {
+                                <i class="bi-star-half text-warning"></i> <!-- Estrella media -->
+                            }
+                            else
+                            {
+                                <i class="bi-star text-warning"></i> <!-- Estrella vacía -->
+                            }
+                        }
+                        (@ViewBag.Valoraciones.Count)
+                    </div>
+                }
+                else
+                {
+                    <p>No hay valoraciones disponibles. </p>
+                }
+                <!-- Botón para añadir una valoración -->
+                @if (usuario != null)
+                {
+                    <button type="button" class="btn btn-outline-primary mt-3" data-bs-toggle="modal" data-bs-target="#addRatingModal">
+                        Añadir valoración
+                    </button>
+                }
+                <!-- Agrega más información del propietario según sea necesario -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para añadir valoración -->
+<div class="modal fade" id="addRatingModal" tabindex="-1" aria-labelledby="addRatingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addRatingModalLabel">Añadir valoración</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("~/Views/Valoracion/CreateUsuario.cshtml", new WebRentaCar2.Models.ValoracionViewModel { IdDestinatario = ViewBag.IdPropietario, Tipo = TipoValoracion.usuario })
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <!-- Sección de vehículos relacionados -->
 <div class="mt-5">
@@ -217,7 +287,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                @Html.Partial("~/Views/Valoracion/Create.cshtml", new WebRentaCar2.Models.ValoracionViewModel { IdDestinatario = Model.Id })
+                @Html.Partial("~/Views/Valoracion/CreateCoche.cshtml", new WebRentaCar2.Models.ValoracionViewModel { IdDestinatario = Model.Id, Tipo = TipoValoracion.coche })
             </div>
         </div>
     </div>

@@ -39,6 +39,7 @@ namespace WebRentaCar2
             services.AddScoped<ICocheRepository, CocheRepository>();
             services.AddScoped<IValoracionRepository, ValoracionRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IMarcaRepository, MarcaRepository>();
 
 
         }
