@@ -125,6 +125,37 @@ namespace WebRentaCar2.Controllers
             }
         }
 
+        // GET: UsuarioController/Create
+        public ActionResult Registro()
+        {
+            return View();
+        }
+
+        // POST: UsuarioController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Registro(UsuarioViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    UsuarioRepository usuRepo = new UsuarioRepository();
+                    UsuarioCEN usuCEN = new UsuarioCEN(usuRepo);
+
+                    // Crear el nuevo usuario
+                    usuCEN.NuevoUsuario(model.Correo, model.Password, "foto1", model.FechaNacimiento, model.Telefono, model.Direccion, "favoritos1");
+
+                    return RedirectToAction("Index", "Home");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error al crear el usuario: " + ex.Message);
+                }
+            }
+            return View(model);
+        }
+
 
         // GET: UsuarioController
         public ActionResult Index()

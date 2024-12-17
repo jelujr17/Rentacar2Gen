@@ -85,11 +85,11 @@
         document.addEventListener("DOMContentLoaded", function () {
             var profileIcon = document.getElementById('profile-icon');
             var popoverContent = `
-                        <p class="mb-2">Bienvenido, por favor:</p>
-                        <a class="btn btn-primary btn-sm mb-1" href="@Url.Action("Login", "Usuario")">Iniciar sesión</a>
-                        <br>
-                        <a class="btn btn-secondary btn-sm" href="#">Registrarse</a>
-                    `;
+                                <p class="mb-2">Bienvenido, por favor:</p>
+                                <a class="btn btn-danger btn-block" href="@Url.Action("Login", "Usuario")">Iniciar sesión</a>
+                                <br>
+                                <a class="btn btn-secondary btn-sm" href="@Url.Action("Registro", "Usuario")">Registrarse</a>
+                            `;
             var popover = new bootstrap.Popover(profileIcon, {
                 trigger: 'click',
                 placement: 'bottom',

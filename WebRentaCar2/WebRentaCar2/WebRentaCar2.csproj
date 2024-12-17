@@ -55,4 +55,11 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Usuario\Registro.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

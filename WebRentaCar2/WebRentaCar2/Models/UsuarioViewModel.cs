@@ -55,24 +55,24 @@ namespace WebRentaCar2.Models
         [Display(Prompt = "Introduce los favoritos del Usuario", Description = "Favoritos del Usuario", Name = "Favoritos")]
         public string Favoritos { get; set; }
 
-        [Display(Prompt = "Introduce los coches propiedad del Usuario", Description = "Coches propiedad del Usuario", Name = "Coches propiedad")]
-        public IList<CocheEN> CochePropiedad { get; set; }
+        //[Display(Prompt = "Introduce los coches propiedad del Usuario", Description = "Coches propiedad del Usuario", Name = "Coches propiedad")]
+        //public IList<CocheEN> CochePropiedad { get; set; }
 
-        [Display(Prompt = "Introduce los coches favoritos del Usuario", Description = "Coches favoritos del Usuario", Name = "Coches favoritos")]
-        public IList<CocheEN> CochesFavoritos { get; set; }
+        //[Display(Prompt = "Introduce los coches favoritos del Usuario", Description = "Coches favoritos del Usuario", Name = "Coches favoritos")]
+        //public IList<CocheEN> CochesFavoritos { get; set; }
 
-        [Display(Prompt = "Introduce las reservas del Usuario", Description = "Reservas del Usuario", Name = "Reservas")]
-        public IList<ReservaEN> Reservas { get; set; }
+        //[Display(Prompt = "Introduce las reservas del Usuario", Description = "Reservas del Usuario", Name = "Reservas")]
+        //public IList<ReservaEN> Reservas { get; set; }
 
-        [Display(Prompt = "Introduce las notificaciones del Usuario", Description = "Notificaciones del Usuario", Name = "Notificaciones")]
-        public IList<NotificacionesEN> Notificaciones { get; set; }
+        //[Display(Prompt = "Introduce las notificaciones del Usuario", Description = "Notificaciones del Usuario", Name = "Notificaciones")]
+        //public IList<NotificacionesEN> Notificaciones { get; set; }
 
-        [Display(Prompt = "Introduce los mensajes del Usuario", Description = "Mensajes del Usuario", Name = "Mensajes")]
-        public IList<MensajesEN> Mensajes { get; set; }
+        //[Display(Prompt = "Introduce los mensajes del Usuario", Description = "Mensajes del Usuario", Name = "Mensajes")]
+        //public IList<MensajesEN> Mensajes { get; set; }
 
-        [Display(Prompt = "Introduce las valoraciones del Usuario", Description = "Valoraciones del Usuario", Name = "Valoraciones")]
-        public IList<ValoracionEN> Valoracion { get; set; }
-               
+        //[Display(Prompt = "Introduce las valoraciones del Usuario", Description = "Valoraciones del Usuario", Name = "Valoraciones")]
+        //public IList<ValoracionEN> Valoracion { get; set; }
+
     }
 
 }
