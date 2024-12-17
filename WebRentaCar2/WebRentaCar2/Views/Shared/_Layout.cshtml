@@ -9,36 +9,95 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebRentaCar2.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        .popover {
-            max-width: 200px; /* Ajusta el tamaño del popover */
-            text-align: center; /* Centra el contenido del texto */
+        body {
+            font-family: 'Poppins', sans-serif;
         }
 
-        .navbar-nav .nav-item {
-            margin-top: 0; /* Ajusta este valor según sea necesario */
+        .navbar {
+            background: linear-gradient(90deg, #ff6b6b, #f8c291);
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .navbar-brand {
-            font-size: 1.5rem; /* Ajusta el tamaño de la fuente según sea necesario */
+            color: #fff;
+            font-weight: 600;
         }
 
         .nav-link {
-            font-size: 1rem; /* Ajusta el tamaño de la fuente según sea necesario */
+            color: #f1f1f1;
+            font-size: 1rem;
+            margin: 0 10px;
         }
 
+            .nav-link:hover {
+                color: #ffdddd;
+            }
+
         .form-control {
-            height: 2rem; /* Ajusta la altura del campo de búsqueda */
+            height: 2rem;
+            border-radius: 20px;
         }
 
         .btn-outline-success {
-            height: 2rem; /* Ajusta la altura del botón de búsqueda */
+            height: 2rem;
+            border-radius: 20px;
+            border-color: #ff6b6b;
+            color: #fff;
+            background-color: #ff6b6b;
+            font-weight: 600;
         }
+
+            .btn-outline-success:hover {
+                background-color: #c82333;
+                border-color: #bd2130;
+                color: #fff;
+            }
+
+        #profile-icon {
+            font-size: 1.5rem;
+            color: #ff6b6b;
+        }
+
+            #profile-icon:hover {
+                color: #ff9b9b;
+            }
+
+        .popover {
+            max-width: 200px;
+            text-align: center;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+            .popover .btn {
+                width: 100%;
+                border-radius: 20px;
+                margin-bottom: 10px;
+            }
+
+        .footer {
+            background-color: #343a40;
+            color: #f8f9fa;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+            .footer a {
+                color: #ff6b6b;
+            }
+
+                .footer a:hover {
+                    color: #fff;
+                }
     </style>
 </head>
+
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand mb-0" asp-area="" asp-controller="Home" asp-action="Index">
                     Auto<span class="text-danger">Rent</span>
@@ -50,17 +109,17 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between align-items-center">
                     <ul class="navbar-nav flex-grow-1 mb-2 mb-sm-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Coche" asp-action="Index">Coches</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Coche" asp-action="Index">Coches</a>
                         </li>
                     </ul>
-                    <form class="d-flex mb-2 mb-sm-0">
-                        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+                    <form class="d-flex mb-2 mb-sm-0" method="get" asp-controller="Coche" asp-action="Buscar">
+                        <input class="form-control me-2" type="search" name="query" placeholder="Buscar" aria-label="Buscar">
                         <button class="btn btn-outline-success" type="submit">Buscar</button>
                     </form>
-                    <a class="nav-link text-dark" href="#" id="profile-icon">
+                    <a class="nav-link text-light" href="#" id="profile-icon">
                         <i class="bi bi-person"></i>
                     </a>
                 </div>
@@ -73,7 +132,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer text-muted">
         <div class="container">
             &copy; 2024 - AutoRent - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
@@ -85,11 +144,10 @@
         document.addEventListener("DOMContentLoaded", function () {
             var profileIcon = document.getElementById('profile-icon');
             var popoverContent = `
-                                <p class="mb-2">Bienvenido, por favor:</p>
-                                <a class="btn btn-danger btn-block" href="@Url.Action("Login", "Usuario")">Iniciar sesión</a>
-                                <br>
-                                <a class="btn btn-secondary btn-sm" href="@Url.Action("Registro", "Usuario")">Registrarse</a>
-                            `;
+                                        <p class="mb-2">Bienvenido, por favor:</p>
+                                        <a class="btn btn-danger" href="@Url.Action("Login", "Usuario")">Iniciar sesión</a>
+                                        <a class="btn btn-secondary" href="@Url.Action("Registro", "Usuario")">Registrarse</a>
+                                    `;
             var popover = new bootstrap.Popover(profileIcon, {
                 trigger: 'click',
                 placement: 'bottom',
@@ -101,4 +159,5 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

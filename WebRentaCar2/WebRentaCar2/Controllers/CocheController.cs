@@ -34,17 +34,44 @@ namespace WebRentaCar2.Controllers
         }
 
         // GET: CocheController
-        public ActionResult Index()
+        public ActionResult Index(string query)
         {
             SessionInitialize();
             CocheCEN cocheCEN = new CocheCEN(_cocheRepository);
 
             IList<CocheEN> listEN = cocheCEN.ObtenerCoches(0, -1);
+            if (string.IsNullOrEmpty(query)) {
+
+                listEN = cocheCEN.ObtenerCoches(0, -1);
+
+            }
+            else
+            {
+                listEN = listEN.Where(c => c.Matricula.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                            c.Propietario.Correo.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
             IEnumerable<CocheViewModel> listArts = new CocheAssembler().ConvertirListENToViewModel(listEN).ToList();
             SessionClose();
 
             return View(listArts);
+        }
+
+        [HttpGet]
+        public ActionResult Buscar(string query)
+        {
+            SessionInitialize();
+            CocheCEN cocheCEN = new CocheCEN(_cocheRepository);
+
+            IList<CocheEN> listEN = cocheCEN.ObtenerCoches(0, -1)
+                .Where(c => c.Matricula.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                            c.Propietario.Correo.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            IEnumerable<CocheViewModel> listArts = new CocheAssembler().ConvertirListENToViewModel(listEN).ToList();
+            SessionClose();
+
+            return View("ResultadosBusqueda", listArts);
         }
 
         // GET: CocheController/Details/5
