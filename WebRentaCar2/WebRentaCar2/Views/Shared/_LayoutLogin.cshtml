@@ -4,6 +4,7 @@
     ViewData["Title"] = "Index";
 
     UsuarioViewModel usuario = Context.Session.Get<UsuarioViewModel>("usuario");
+    
     string nombre = usuario?.Correo ?? "Invitado";
 }
 

@@ -38,29 +38,14 @@
                 </ul>
             </div>
         }
-    } 
-
-    <!-- Navegación breadcrumb -->
+    }    <!-- Navegación breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb bg-light p-3 rounded">
-            <li class="breadcrumb-item">
-                <a href="@Url.Action("Index", "Home")" class="text-decoration-none text-danger">
-                    <i class="bi bi-house-door-fill"></i> Inicio
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="@Url.Action("Index", "Coche")" class="text-decoration-none text-danger">
-                    <i class="bi bi-car-front-fill"></i> Coches
-                </a>
-            </li>
-            <li class="breadcrumb-item active text-danger" aria-current="page">
-                <i class="bi bi-info-circle-fill"></i> @Model.Matricula
-            </li>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Coche")">Coches</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Matricula</li>
         </ol>
     </nav>
-
-
-
 
     <div class="row">
         <!-- Columna de la imagen principal y miniaturas -->
@@ -89,7 +74,7 @@
         <!-- Columna de los detalles del coche -->
         <div class="col-md-6">
             <h2 class="mb-3">@Model.Matricula</h2>
-            <h3 class="text-danger mb-3">@Html.DisplayFor(model => model.Precio)</h3>
+            <h3 class="text-danger mb-3">€@Html.DisplayFor(model => model.Precio)</h3>
 
             <div class="mb-3">
                 <strong>Valoración:</strong>
@@ -141,15 +126,43 @@
                         onclick="showConfirmModal(@Model.Id, '@(matriculasFavoritas.Contains(Model.Id.ToString()) ? "remove" : "add")')">
                     <i class="@(matriculasFavoritas.Contains(Model.Id.ToString()) ? "bi-heart-fill" : "bi-heart")"></i>
                 </button>
-
+                <button class="btn btn-primary btn-lg w-100" onclick="location.href='@Url.Action("Reservar", "Reserva", new { cocheId = Model.Id })'">Añadir al carrito</button>
             }
-            <button class="btn btn-primary btn-lg w-100">Añadir al carrito</button>
+            else
+            {
+                <button type="button" class="btn btn-outline-danger me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+                    <i class="bi-heart"></i>
+                </button>
+                <button class="btn btn-primary btn-lg w-100" data-bs-toggle="modal" data-bs-target="#loginModal">Añadir al carrito</button>
+            }
         </div>
+
         <small class="text-muted d-block">
             Al realizar una transacción se compromete a cumplir los Términos y Condiciones de Auto Rent.
         </small>
     </div>
 </div>
+
+<!-- Modal para indicar que el usuario no está logueado -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Iniciar sesión</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Debe iniciar sesión para agregar coches a sus favoritos.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="@Url.Action("Login", "Usuario")" class="btn btn-primary">Iniciar sesión</a>
+                <a href="@Url.Action("Registro", "Usuario")" class="btn btn-secondary">Registrarse</a>
+                @*<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal para mostrar información del propietario -->
 <div class="modal fade" id="propietarioModal" tabindex="-1" aria-labelledby="propietarioModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -219,8 +232,6 @@
     </div>
 </div>
 
-
-
 <!-- Sección de vehículos relacionados -->
 <div class="mt-5">
     <h4>Vehículos relacionados</h4>
@@ -245,7 +256,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Sección de valoraciones -->
 <div class="mt-5">
@@ -283,15 +293,15 @@
     {
         <p>No hay valoraciones disponibles para este coche.</p>
     }
-    @if(usuario != null){
-    <!-- Botón para añadir una valoración -->
-    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addRatingModal">
-        Añadir valoración
-    </button>
+    @if (usuario != null)
+    {
+        <!-- Botón para añadir una valoración -->
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addRatingModal">
+            Añadir valoración
+        </button>
     }
-    
-</div>
 
+</div>
 
 <!-- Modal para añadir valoración -->
 <div class="modal fade" id="addRatingModal" tabindex="-1" aria-labelledby="addRatingModalLabel" aria-hidden="true">
@@ -307,11 +317,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
 
 <!-- Modal de confirmación -->
 <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
@@ -331,9 +336,6 @@
         </div>
     </div>
 </div>
-<br />
-
-
 
 <script>
     function toggleFavorito(cocheId, action) {
@@ -412,31 +414,13 @@
         border-color: #dc3545;
     }
 
-    .btn-primary:hover {
-        background-color: #c82333;
-        border-color: #bd2130;
-    }
+        .btn-primary:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
 
     .breadcrumb {
         background-color: #f8f9fa;
-        border-radius: 0.25rem;
-    }
-
-    .breadcrumb-item a {
-        color: #dc3545; /* Rojo */
-        text-decoration: none;
-    }
-
-    .breadcrumb-item a:hover {
-        text-decoration: underline;
-    }
-
-    .breadcrumb-item.active {
-        color: #dc3545; /* Rojo */
-    }
-
-    .breadcrumb .bi {
-        margin-right: 5px;
     }
 
     .card {

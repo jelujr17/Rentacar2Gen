@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using WebRentaCar2.Assemblers;
 using WebRentaCar2.Models;
+using System.Diagnostics;
 
 namespace WebRentaCar2.Controllers
 {
@@ -51,13 +52,18 @@ namespace WebRentaCar2.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Index", "Coche");
         }
+        public IActionResult Error()
+        {
+            ViewData["ErrorMessage"] = "Debe iniciar sesión para acceder a esta página.";
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
 
         public IActionResult Perfil()
         {
             var usuario = HttpContext.Session.Get<UsuarioViewModel>("usuario");
             if (usuario == null)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Error", "Usuario");
             }
 
             SessionInitialize();

@@ -1,0 +1,28 @@
+﻿@model WebRentaCar2.Models.ErrorViewModel
+@{
+    ViewData["Title"] = "Acceso Restringido";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="alert alert-danger text-center">
+                <h1 class="display-4">Acceso Restringido</h1>
+                <p class="lead">Debe iniciar sesión para acceder a esta página.</p>
+                <hr class="my-4">
+                <p>Por favor, inicie sesión con sus credenciales para continuar.</p>
+                <a href="@Url.Action("Login", "Usuario")" class="btn btn-lg" style="background-color: white; border: 1px solid #ccc;">Ir a la página de inicio de sesión</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.ShowRequestId)
+{
+    <div class="text-center mt-3">
+        <p>
+            <strong>ID de la solicitud:</strong> <code>@Model.RequestId</code>
+        </p>
+    </div>
+}
+

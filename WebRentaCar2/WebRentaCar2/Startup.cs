@@ -1,15 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Rentacar2Gen.ApplicationCore.IRepository.RentaCar2;
 using Rentacar2Gen.Infraestructure.Repository.RentaCar2;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebRentaCar2
 {
@@ -34,13 +30,13 @@ namespace WebRentaCar2
                 options.Cookie.Name = ".Ejemplo.Session";
                 options.IdleTimeout = TimeSpan.FromSeconds(1000);
                 options.Cookie.IsEssential = true;
-            }
-            );
+            });
+
             services.AddScoped<ICocheRepository, CocheRepository>();
             services.AddScoped<IValoracionRepository, ValoracionRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IMarcaRepository, MarcaRepository>();
-
+            services.AddScoped<IReservaRepository, ReservaRepository>();
 
         }
 
@@ -54,9 +50,10 @@ namespace WebRentaCar2
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -73,5 +70,6 @@ namespace WebRentaCar2
                     pattern: "{controller=Coche}/{action=Index}/{id?}");
             });
         }
+
     }
 }
