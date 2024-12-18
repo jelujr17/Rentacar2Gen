@@ -226,7 +226,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                @Html.Partial("~/Views/Valoracion/CreateUsuario.cshtml", new WebRentaCar2.Models.ValoracionViewModel { IdDestinatario = ViewBag.IdPropietario, Tipo = TipoValoracion.usuario })
+                @Html.Partial("~/Views/Valoracion/Create.cshtml", new WebRentaCar2.Models.ValoracionViewModel { IdDestinatario = Model.Id})
             </div>
         </div>
     </div>
@@ -312,7 +312,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                @Html.Partial("~/Views/Valoracion/CreateCoche.cshtml", new WebRentaCar2.Models.ValoracionViewModel { IdDestinatario = Model.Id, Tipo = TipoValoracion.coche })
+                @Html.Partial("~/Views/Valoracion/Create.cshtml", new WebRentaCar2.Models.ValoracionViewModel { IdDestinatario = Model.Id })
             </div>
         </div>
     </div>
@@ -356,17 +356,17 @@
             .then(result => {
                 if (result.success) {
                     // Actualizar el icono del corazón
-                    const button = document.getElementById(favorito - btn - ${ cocheId });
+                    const button = document.getElementById(`favorito-btn-${cocheId}`);
                     if (action === "add") {
                         button.classList.remove("btn-outline-danger");
                         button.classList.add("btn-danger");
                         button.innerHTML = '<i class="bi-heart-fill"></i>';
-                        button.setAttribute("onclick", showConfirmModal(${ cocheId }, 'remove'));
+                        button.setAttribute("onclick", `showConfirmModal(${cocheId}, 'remove')`);
                     } else {
                         button.classList.remove("btn-danger");
                         button.classList.add("btn-outline-danger");
                         button.innerHTML = '<i class="bi-heart"></i>';
-                        button.setAttribute("onclick", showConfirmModal(${ cocheId }, 'add'));
+                        button.setAttribute("onclick", `showConfirmModal(${cocheId}, 'add')`);
                     }
                 } else {
                     alert("Error: " + result.error);

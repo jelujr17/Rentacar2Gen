@@ -72,7 +72,7 @@ namespace WebRentaCar2.Controllers
 
 
         [HttpPost]
-        public IActionResult CreateCoche(ValoracionViewModel model)
+        public IActionResult Create(ValoracionViewModel model)
         {
             if (model == null)
             {
